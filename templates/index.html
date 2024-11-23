@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="static/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">Логотип</div>
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Главная</a></li>
+          <li><a href="#">Услуги</a></li>
+          <li><a href="#">Товары</a></li>
+          <li><a href="#">Акции</a></li>
+          <li><a href="#">Записаться</a></li>
+          <li><a href="#">Профиль</a></li>
+        </ul>
+      </nav>
+      <button class="toggle-menu-button">☰</button>
+    </header>
+    <main>
+      <section class="back-header">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="swiper-text-container">
+                <p class="h1 wh">Ремонт</p>
+                <p class="h1 light-text">Авто</p>
+                <p class="h2 wh" style="margin-top: 10px">
+                  Диагностика и техническое обслуживание автомобилей
+                </p>
+                <button class="button h3" style="margin-top: 20px">
+                  Записаться
+                </button>
+              </div>
+              <img src="assets/car.png" alt="" class="img-back" />
+            </div>
+            <div class="swiper-slide">
+              <img src="assets/car.png" alt="" class="img-back" />
+            </div>
+            <div class="swiper-slide">
+              <img src="assets/car.png" alt="" class="img-back" />
+            </div>
+          </div>
+          <button class="swiper-button-prev"></button>
+          <button class="swiper-button-next"></button>
+        </div>
+      </section>
+      <section class="center-container">
+        <div class="form">
+          <p class="h2 form-title">Онлайн-запись</p>
+          <div>
+            <div>
+              <input
+                type="text"
+                class="form-input h3"
+                style="margin-top: 25px"
+                placeholder="Имя"
+              />
+            </div>
+            <div>
+              <input type="text" class="form-input h3" placeholder="Фамилия" />
+            </div>
+            <div>
+              <input type="text" class="form-input h3" placeholder="Телефон" />
+            </div>
+            <div>
+              <input type="text" class="form-input h3" placeholder="E-mail" />
+            </div>
+            <div>
+              <input
+                type="text"
+                class="form-input h3"
+                placeholder="Марка авто"
+              />
+            </div>
+          </div>
+          <button class="button submit-button h3">Отправить заявку</button>
+        </div>
+      </section>
+    </main>
+    <script src="static/header.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script src="static/swiper.js" defer></script>
+
+
+  <div id="data-container"></div>
+  <script src="static/scripts.js" defer></script>
+  </body>
+</html>
