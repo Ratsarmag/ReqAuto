@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body,
 p {
@@ -163,10 +167,17 @@ nav li {
   color: #fafbfb;
 }
 
-.center-container {
+.horizontal-center-container {
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+.vertical-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
 }
 
 .form {
@@ -204,6 +215,45 @@ nav li {
 .form-input:focus {
   border-color: #ff9640;
   background-color: #fff;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#errorMessage {
+  margin-bottom: 20px;
 }
 
 @media (max-width: 1200px) {
