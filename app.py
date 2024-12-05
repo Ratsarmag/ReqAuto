@@ -41,9 +41,9 @@ def auth_submit():
     elif user.roleID == 3:
         return jsonify({"status": "success", "redirect": url_for('mechanic_dashboard')})
     elif user.roleID == 4:
-        return jsonify({"status": "success", "redirect": url_for('client_dashboard')})
+        return jsonify({"status": "success", "redirect": url_for('profile')})
 
-    return jsonify({"status": "error", "message": "Unknown error"})
+    return jsonify({"status": "error", "message": "Неизвестная ошибка"})
 
 
 @app.route('/get_models/<int:car_make_id>')
@@ -92,6 +92,31 @@ def submit():
     db.session.commit()
 
     return redirect(url_for('index'))
+
+
+@app.route('/api/repair-requests', methods=['GET'])
+def get_repair_requests():
+    repair_requests = RepairRequest.query.all()
+    requests_data = []
+    for request in repair_requests:
+        user = User.query.get(request.userID)
+        car = Car.query.get(request.carID)
+        car_make = CarMake.query.get(car.carMakeID)
+        car_model = CarModel.query.get(car.carModelID)
+        status = Status.query.get(request.statusID)
+        requests_data.append({
+            'id': request.ID,
+            'firstName': user.firstName,
+            'lastName': user.lastName,
+            'phone': user.phone,
+            'carMake': car_make.carMake,
+            'carModel': car_model.carModel,
+            'defectsDescription': request.defectsDescription,
+            'status': status.status,
+            'isAccepted': request.statusID == 2
+
+        })
+    return jsonify(requests_data)
 
 
 if __name__ == '__main__':

@@ -18,10 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
+        console.error("Возникла проблема с операцией fetch:", error);
         showError("Произошла ошибка при отправке запроса");
       });
   });

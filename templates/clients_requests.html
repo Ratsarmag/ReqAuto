@@ -1,46 +1,24 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Заявки клиентов</title>
-    <style>
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-    </style>
+    <title>Repair Requests</title>
+    <link rel="stylesheet" href="/static\styles.css" />
+    <script src="/static/cardReqursts.js" defer></script>
+    <style></style>
   </head>
   <body>
-    <h1>Заявки клиентов</h1>
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>Клиент</th>
-        <th>Автомобиль</th>
-        <th>Проблема</th>
-        <th>Статус</th>
-      </tr>
-      {% for request in requests %}
-      <tr>
-        <td>{{ request.ID }}</td>
-        <td>{{ request.user.firstName }} {{ request.user.lastName }}</td>
-        <td>
-          {{ request.car.carMake.carMake }} {{ request.car.carModel.carModel }}
-        </td>
-        <td>{{ request.defectsDescription }}</td>
-        <td>{{ request.status.status }}</td>
-      </tr>
-      {% endfor %}
-    </table>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Заявки</a></li>
+          <li><a href="#">Профиль</a></li>
+        </ul>
+      </nav>
+      <button class="toggle-menu-button">☰</button>
+    </header>
+    <div id="requests-container"></div>
   </body>
 </html>

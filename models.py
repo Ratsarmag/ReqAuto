@@ -36,7 +36,7 @@ class User(db.Model):
 class Role(db.Model):
     __tablename__ = 'Role'
     ID = db.Column(db.Integer, primary_key=True)
-    role_name = db.Column(db.String(50))
+    roleName = db.Column(db.String(50))
 
 
 class Status(db.Model):
