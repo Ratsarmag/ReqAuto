@@ -119,6 +119,78 @@ def get_repair_requests():
     return jsonify(requests_data)
 
 
+@app.route('/api/repair-requests/<int:request_id>', methods=['GET'])
+def get_repair_request(request_id):
+    repair_request = RepairRequest.query.get(request_id)
+    if repair_request:
+        user = User.query.get(repair_request.userID)
+        car = Car.query.get(repair_request.carID)
+        car_make = CarMake.query.get(car.carMakeID)
+        car_model = CarModel.query.get(car.carModelID)
+        return jsonify({
+            'id': repair_request.ID,
+            'firstName': user.firstName,
+            'lastName': user.lastName,
+            'phone': user.phone,
+            'carMakeID': car_make.ID,
+            'carModelID': car_model.ID,
+            'defectsDescription': repair_request.defectsDescription
+        })
+    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
+
+
+@app.route('/api/repair-requests/<int:request_id>/edit', methods=['POST'])
+def edit_request(request_id):
+    repair_request = RepairRequest.query.get(request_id)
+    if repair_request:
+        user = User.query.get(repair_request.userID)
+        car = Car.query.get(repair_request.carID)
+
+        user.firstName = request.form['firstName']
+        user.lastName = request.form['lastName']
+        user.phone = request.form['phone']
+
+        car_make = CarMake.query.filter_by(
+            carMake=request.form['carMake']).first()
+        car_model = CarModel.query.filter_by(
+            carModel=request.form['carModel'], carMakeID=car_make.ID).first()
+
+        if not car_make:
+            car_make = CarMake(carMake=request.form['carMake'])
+            db.session.add(car_make)
+            db.session.commit()
+
+        if not car_model:
+            car_model = CarModel(
+                carModel=request.form['carModel'], carMakeID=car_make.ID)
+            db.session.add(car_model)
+            db.session.commit()
+
+        car.carMakeID = car_make.ID
+        car.carModelID = car_model.ID
+        repair_request.defectsDescription = request.form['defectsDescription']
+
+        db.session.commit()
+        return jsonify({'status': 'success'})
+    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
+
+
+@app.route('/api/car-make/<int:car_make_id>', methods=['GET'])
+def get_car_make(car_make_id):
+    car_make = CarMake.query.get(car_make_id)
+    if car_make:
+        return jsonify({'carMake': car_make.carMake})
+    return jsonify({'status': 'error', 'message': 'Car make not found'}), 404
+
+
+@app.route('/api/car-model/<int:car_model_id>', methods=['GET'])
+def get_car_model(car_model_id):
+    car_model = CarModel.query.get(car_model_id)
+    if car_model:
+        return jsonify({'carModel': car_model.carModel})
+    return jsonify({'status': 'error', 'message': 'Car model not found'}), 404
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

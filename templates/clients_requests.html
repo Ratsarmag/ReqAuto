@@ -6,7 +6,8 @@
     <title>Repair Requests</title>
     <link rel="stylesheet" href="/static\styles.css" />
     <script src="/static/cardReqursts.js" defer></script>
-    <style></style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="/static/updateModels.js" defer></script>
   </head>
   <body>
     <header>
@@ -19,6 +20,69 @@
       </nav>
       <button class="toggle-menu-button">☰</button>
     </header>
-    <div id="requests-container"></div>
+    <main>
+      <div id="requests-container"></div>
+      <div id="editModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <section class="horizontal-center-container" id="editFormContainer">
+            <form class="form" id="editForm">
+              <label class="h2 form-title">Редактировать заявку</label>
+              <input type="hidden" id="editRequestId" />
+              <input
+                class="form-input h3"
+                type="text"
+                id="editFirstName"
+                name="firstName"
+                style="margin-top: 25px"
+                placeholder="Имя"
+                required
+              /><br />
+              <input
+                class="form-input h3"
+                type="text"
+                id="editLastName"
+                name="lastName"
+                placeholder="Фамилия"
+                required
+              /><br />
+              <input
+                class="form-input h3"
+                type="text"
+                id="editPhone"
+                name="phone"
+                placeholder="Телефон"
+                required
+              /><br />
+              <input
+                class="form-input h3"
+                id="editCarMake"
+                name="carMake"
+                placeholder="Марка автомобиля"
+                required
+              /><br />
+              <input
+                class="form-input h3"
+                id="editCarModel"
+                name="carModel"
+                placeholder="Модель автомобиля"
+                required
+              /><br />
+              <textarea
+                class="form-input h3"
+                id="editDefectsDescription"
+                name="defectsDescription"
+                placeholder="Описание проблемы"
+                required
+              ></textarea
+              ><br />
+              <button class="button submit-button h3" type="submit">
+                Сохранить
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
   </body>
 </html>

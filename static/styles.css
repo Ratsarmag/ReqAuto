@@ -39,7 +39,7 @@ p {
 header {
   margin: 0;
   padding: 20px;
-  background-color: #6f2cf5;
+  background-color: #4709c3;
   width: 100%;
   position: sticky;
   display: flex;
@@ -69,7 +69,7 @@ nav ul {
 
 nav a {
   text-decoration: none;
-  color: #fafbfb;
+  color: #fff;
 }
 
 nav a:hover {
@@ -118,7 +118,7 @@ nav li {
 .swiper-button-next {
   background-color: rgba(255, 255, 255, 0);
   border: none;
-  --swiper-theme-color: #6f2cf5;
+  --swiper-theme-color: #fdad00;
 }
 
 .swiper-slide {
@@ -140,7 +140,7 @@ nav li {
 }
 
 .button {
-  background-color: #fafbfb;
+  background-color: #f9fafa;
   width: fit-content;
   height: fit-content;
   padding: 10px 20px;
@@ -151,7 +151,7 @@ nav li {
 }
 
 .button:hover {
-  color: #6f2cf5;
+  color: #4409b9;
   scale: 1.05;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
