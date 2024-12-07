@@ -113,7 +113,7 @@ def get_repair_requests():
             'carModel': car_model.carModel,
             'defectsDescription': request.defectsDescription,
             'status': status.status,
-            'isAccepted': request.statusID == 2
+            'isAccepted': request.statusID != 1
 
         })
     return jsonify(requests_data)
@@ -189,6 +189,36 @@ def get_car_model(car_model_id):
     if car_model:
         return jsonify({'carModel': car_model.carModel})
     return jsonify({'status': 'error', 'message': 'Car model not found'}), 404
+
+
+@app.route('/api/mechanics', methods=['GET'])
+def get_mechanics():
+    # Получаем всех механиков
+    all_mechanics = User.query.filter_by(roleID=3).all()
+    # Получаем все заявки со статусом "В работе"
+    active_requests = RepairRequest.query.filter_by(statusID=2).all()
+    # Получаем идентификаторы механиков, которые уже работают над заявками
+    busy_mechanic_ids = [
+        request.mechanicID for request in active_requests if request.mechanicID is not None]
+    # Фильтруем механиков, которые не работают над заявками
+    available_mechanics = [
+        mechanic for mechanic in all_mechanics if mechanic.ID not in busy_mechanic_ids]
+    mechanics_data = [{'ID': mechanic.ID, 'firstName': mechanic.firstName,
+                       'lastName': mechanic.lastName} for mechanic in available_mechanics]
+    return jsonify(mechanics_data)
+
+
+@app.route('/api/repair-requests/<int:request_id>/accept', methods=['POST'])
+def accept_request(request_id):
+    repair_request = RepairRequest.query.get(request_id)
+    if repair_request:
+        mechanic_id = request.form['mechanicId']
+        repair_request.statusID = 2  # Обновляем статус на статус с ID 2
+        repair_request.mechanicID = mechanic_id  # Назначаем механика
+        db.session.commit()
+        new_status = Status.query.get(2).status
+        return jsonify({'status': 'success', 'new_status': new_status})
+    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
 
 
 if __name__ == '__main__':

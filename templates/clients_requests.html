@@ -83,6 +83,28 @@
           </section>
         </div>
       </div>
+      <div id="assignModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <section class="horizontal-center-container" id="assignFormContainer">
+            <form class="form" id="assignForm">
+              <label class="h2 form-title">Назначить механика</label>
+              <input type="hidden" id="assignRequestId" />
+              <select
+                class="form-input h3"
+                id="assignMechanic"
+                name="mechanicId"
+                required
+              >
+                <option value="">Выберите механика</option></select
+              ><br />
+              <button class="button submit-button h3" type="submit">
+                Назначить
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
     </main>
   </body>
 </html>

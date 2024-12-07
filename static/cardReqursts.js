@@ -7,14 +7,32 @@ document.addEventListener("DOMContentLoaded", function () {
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-                        <p class="h2" style="font-weight: bold">Заявка #${request.id}</p>
-                        <p class="h3" style="margin-top: 5px">Имя: ${request.firstName} ${request.lastName}</p>
-                        <p class="h3" style="margin-top: 5px">Телефон: ${request.phone}</p>
-                        <p class="h3" style="margin-top: 5px">Автомобиль: ${request.carMake} ${request.carModel}</p>
-                        <p class="h3" style="margin-top: 5px">Описание проблемы: ${request.defectsDescription}</p>
-                        <p class="h3" style="margin-top: 5px">Статус заявки: ${request.status}</p>
-                        <button onclick="editRequest(${request.id})" class="button submit-button h3">Редактировать</button>
-                        <button onclick="acceptRequest(${request.id})" class="button submit-button h3" style="margin-left: 10px">Принять в работу</button>
+                        <p class="h2" style="font-weight: bold">Заявка #${
+                          request.id
+                        }</p>
+                        <p class="h3" style="margin-top: 5px">Имя: ${
+                          request.firstName
+                        } ${request.lastName}</p>
+                        <p class="h3" style="margin-top: 5px">Телефон: ${
+                          request.phone
+                        }</p>
+                        <p class="h3" style="margin-top: 5px">Автомобиль: ${
+                          request.carMake
+                        } ${request.carModel}</p>
+                        <p class="h3" style="margin-top: 5px">Описание проблемы: ${
+                          request.defectsDescription
+                        }</p>
+                        <p class="h3" style="margin-top: 5px">Статус заявки: ${
+                          request.status
+                        }</p>
+                        <button onclick="editRequest(${
+                          request.id
+                        })" class="button submit-button h3">Редактировать</button>
+                        ${
+                          request.isAccepted
+                            ? ""
+                            : `<button id="accept-request-${request.id}" onclick="acceptRequest(${request.id})" class="button submit-button h3">Принять в работу</button>`
+                        }
                     `;
         container.appendChild(card);
       });
@@ -103,68 +121,65 @@ function editRequest(id) {
 }
 
 function acceptRequest(id) {
-  function acceptRequest(id) {
-    const modal = document.getElementById("assignModal");
-    const form = document.getElementById("assignForm");
-    const closeBtn = modal.querySelector(".close");
-    const mechanicSelect = document.getElementById("assignMechanic");
+  const modal = document.getElementById("assignModal");
+  const form = document.getElementById("assignForm");
+  const closeBtn = modal.querySelector(".close");
+  const mechanicSelect = document.getElementById("assignMechanic");
 
-    // Заполняем форму текущими данными
-    document.getElementById("assignRequestId").value = id;
+  // Заполняем форму текущими данными
+  document.getElementById("assignRequestId").value = id;
 
-    // Получаем список доступных механиков
-    fetch("/api/mechanics")
+  // Получаем список доступных механиков
+  fetch("/api/mechanics")
+    .then((response) => response.json())
+    .then((data) => {
+      mechanicSelect.innerHTML = '<option value="">Выберите механика</option>';
+      data.forEach((mechanic) => {
+        const option = document.createElement("option");
+        option.value = mechanic.ID;
+        option.textContent = `${mechanic.firstName} ${mechanic.lastName}`;
+        mechanicSelect.appendChild(option);
+      });
+    });
+
+  modal.style.display = "block";
+
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  form.onsubmit = function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    fetch(`/api/repair-requests/${id}/accept`, {
+      method: "POST",
+      body: formData,
+    })
       .then((response) => response.json())
       .then((data) => {
-        mechanicSelect.innerHTML =
-          '<option value="">Выберите механика</option>';
-        data.forEach((mechanic) => {
-          const option = document.createElement("option");
-          option.value = mechanic.ID;
-          option.textContent = `${mechanic.firstName} ${mechanic.lastName}`;
-          mechanicSelect.appendChild(option);
-        });
-      });
-
-    modal.style.display = "block";
-
-    closeBtn.onclick = function () {
-      modal.style.display = "none";
-    };
-
-    window.onclick = function (event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    };
-
-    form.onsubmit = function (event) {
-      event.preventDefault();
-      const formData = new FormData(form);
-      fetch(`/api/repair-requests/${id}/accept`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            modal.style.display = "none";
-            const card = document.getElementById(`request-${id}`);
-            if (card) {
-              card.querySelector(
-                ".request-status"
-              ).textContent = `Статус: ${data.new_status}`;
-              const acceptButton = document.getElementById(
-                `accept-request-${id}`
-              );
-              if (acceptButton) {
-                acceptButton.remove();
-              }
+        if (data.status === "success") {
+          modal.style.display = "none";
+          const card = document.getElementById(`request-${id}`);
+          if (card) {
+            card.querySelector(
+              ".request-status"
+            ).textContent = `Статус: ${data.new_status}`;
+            const acceptButton = document.getElementById(
+              `accept-request-${id}`
+            );
+            if (acceptButton) {
+              acceptButton.remove();
             }
-          } else {
-            console.error("Failed to accept request:", data.message);
           }
-        });
-    };
-  }
+        } else {
+          console.error("Failed to accept request:", data.message);
+        }
+      });
+  };
 }

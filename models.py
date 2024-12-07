@@ -52,3 +52,4 @@ class RepairRequest(db.Model):
     userID = db.Column(db.Integer, db.ForeignKey('User.ID'))
     defectsDescription = db.Column(db.String)
     statusID = db.Column(db.Integer, db.ForeignKey('Status.ID'))
+    mechanicID = db.Column(db.Integer, db.ForeignKey('User.ID'), nullable=True)
