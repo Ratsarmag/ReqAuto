@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Repair Requests</title>
     <link rel="stylesheet" href="/static\styles.css" />
-    <script src="/static/cardReqursts.js" defer></script>
+    <script src="/static/cardRequests.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="/static/updateModels.js" defer></script>
   </head>
@@ -18,6 +18,15 @@
           <li><a href="#">Профиль</a></li>
         </ul>
       </nav>
+
+      <!-- Адаптировать -->
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input h3"
+        placeholder="Поиск по заявкам..."
+        onkeyup="filterRequests()"
+      />
       <button class="toggle-menu-button">☰</button>
     </header>
     <main>
@@ -106,5 +115,6 @@
         </div>
       </div>
     </main>
+    <script src="/static/header.js"></script>
   </body>
 </html>

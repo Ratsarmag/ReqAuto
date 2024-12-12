@@ -1,43 +1,88 @@
+let allRequests = [];
+
 document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/repair-requests")
     .then((response) => response.json())
     .then((data) => {
-      const container = document.getElementById("requests-container");
-      data.forEach((request) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-                        <p class="h2" style="font-weight: bold">Заявка #${
-                          request.id
-                        }</p>
-                        <p class="h3" style="margin-top: 5px">Имя: ${
-                          request.firstName
-                        } ${request.lastName}</p>
-                        <p class="h3" style="margin-top: 5px">Телефон: ${
-                          request.phone
-                        }</p>
-                        <p class="h3" style="margin-top: 5px">Автомобиль: ${
-                          request.carMake
-                        } ${request.carModel}</p>
-                        <p class="h3" style="margin-top: 5px">Описание проблемы: ${
-                          request.defectsDescription
-                        }</p>
-                        <p class="h3" style="margin-top: 5px">Статус заявки: ${
-                          request.status
-                        }</p>
-                        <button onclick="editRequest(${
-                          request.id
-                        })" class="button submit-button h3">Редактировать</button>
-                        ${
-                          request.isAccepted
-                            ? ""
-                            : `<button id="accept-request-${request.id}" onclick="acceptRequest(${request.id})" class="button submit-button h3">Принять в работу</button>`
-                        }
-                    `;
-        container.appendChild(card);
-      });
-    });
+      allRequests = data;
+      displayRequests(data);
+    })
+    .catch((error) => console.error("Ошибка при загрузке заявок:", error));
 });
+
+function displayRequests(requests) {
+  const container = document.getElementById("requests-container");
+  container.innerHTML = "";
+  requests.forEach((request) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = `request-${request.id}`;
+    card.innerHTML = `
+      <p class="h2" style="font-weight: bold">Заявка #${request.id}</p>
+      <p class="h3" style="margin-top: 5px">Имя: ${request.firstName} ${
+      request.lastName
+    }</p>
+      <p class="h3" style="margin-top: 5px">Телефон: ${request.phone}</p>
+      <p class="h3" style="margin-top: 5px">Автомобиль: ${request.carMake} ${
+      request.carModel
+    }</p>
+      <p class="h3" style="margin-top: 5px">Описание проблемы: ${
+        request.defectsDescription
+      }</p>
+      <p class="h3" style="margin-top: 5px">Статус заявки: ${getStatusColor(
+        request.status
+      )}</p>
+      <button onclick="editRequest(${
+        request.id
+      })" class="button submit-button h3">Редактировать</button>
+      ${
+        request.isAccepted
+          ? ""
+          : `<button id="accept-request-${request.id}" onclick="acceptRequest(${request.id})" class="button submit-button h3">Принять в работу</button>`
+      }
+    `;
+    container.appendChild(card);
+  });
+}
+
+function filterRequests() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  let filteredRequests = [];
+
+  if (query.includes("№") || query.includes("#")) {
+    const requestNumber = query.match(/№(\d+)|#(\d+)/);
+    if (requestNumber) {
+      const number = requestNumber[1] || requestNumber[2];
+      filteredRequests = allRequests.filter(
+        (request) => request.id.toString() === number
+      );
+    }
+  } else {
+    filteredRequests = allRequests.filter((request) => {
+      return (
+        request.firstName.toLowerCase().includes(query) ||
+        request.lastName.toLowerCase().includes(query) ||
+        request.phone.toLowerCase().includes(query) ||
+        request.carMake.toLowerCase().includes(query) ||
+        request.carModel.toLowerCase().includes(query) ||
+        request.defectsDescription.toLowerCase().includes(query)
+      );
+    });
+  }
+  displayRequests(filteredRequests);
+}
+
+function getStatusColor(statusText) {
+  const colors = {
+    "новая заявка": "blue",
+    "в работе": "#ff9640",
+    завершена: "#004D00",
+  };
+
+  const color = colors[statusText.toLowerCase()] || "black";
+
+  return `<span style="color: ${color}">${statusText}</span>`;
+}
 
 function editRequest(id) {
   fetch(`/api/repair-requests/${id}`)
@@ -47,13 +92,11 @@ function editRequest(id) {
       const form = document.getElementById("editForm");
       const closeBtn = modal.querySelector(".close");
 
-      // Заполняем форму текущими данными
       document.getElementById("editRequestId").value = id;
       document.getElementById("editFirstName").value = data.firstName;
       document.getElementById("editLastName").value = data.lastName;
       document.getElementById("editPhone").value = data.phone;
 
-      // Получаем названия марки и модели автомобиля
       fetch(`/api/car-make/${data.carMakeID}`)
         .then((response) => response.json())
         .then((carMakeData) => {
@@ -113,7 +156,7 @@ function editRequest(id) {
                 )}`;
               }
             } else {
-              console.error("Failed to edit request:", data.message);
+              console.error("Не удалось редактировать заявку:", data.message);
             }
           });
       };
@@ -126,10 +169,8 @@ function acceptRequest(id) {
   const closeBtn = modal.querySelector(".close");
   const mechanicSelect = document.getElementById("assignMechanic");
 
-  // Заполняем форму текущими данными
   document.getElementById("assignRequestId").value = id;
 
-  // Получаем список доступных механиков
   fetch("/api/mechanics")
     .then((response) => response.json())
     .then((data) => {
@@ -178,7 +219,7 @@ function acceptRequest(id) {
             }
           }
         } else {
-          console.error("Failed to accept request:", data.message);
+          console.error("Не удалось принять заявку в работу:", data.message);
         }
       });
   };

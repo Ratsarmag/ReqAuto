@@ -1,4 +1,4 @@
-window.updateModels = function () {
+function updateModels() {
   var carMakeID = $("#carMake").val() || $("#editCarMake").val();
   $.ajax({
     url: "/get_models/" + carMakeID,
@@ -13,4 +13,4 @@ window.updateModels = function () {
       });
     },
   });
-};
+}

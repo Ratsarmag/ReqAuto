@@ -217,6 +217,21 @@ nav li {
   background-color: #fff;
 }
 
+.search-input {
+  width: fit-content;
+  border-radius: 6px;
+  border: 2px solid #dcddde;
+  background: url(assets/loupe-search.svg) no-repeat 10px center;
+  background-size: auto 70%;
+  padding-left: 50px;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+.search-input::placeholder {
+  color: #fff;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -262,6 +277,11 @@ nav li {
 }
 .card:hover {
   transform: translateY(-5px);
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
 }
 
 @media (max-width: 1200px) {

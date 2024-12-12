@@ -43,7 +43,7 @@ def auth_submit():
     elif user.roleID == 4:
         return jsonify({"status": "success", "redirect": url_for('profile')})
 
-    return jsonify({"status": "error", "message": "Неизвестная ошибка"})
+    return jsonify({"status": "error", "message": "Ошибка авторизации"})
 
 
 @app.route('/get_models/<int:car_make_id>')
