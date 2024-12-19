@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from models import db, User, Car, RepairRequest, Status, CarMake, CarModel
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
@@ -31,7 +32,7 @@ def auth_submit():
 
     user = User.query.filter_by(username=username).first()
 
-    if not user or user.password != password:
+    if not user or not check_password_hash(user.password, password):
         return jsonify({"status": "error", "message": "Неправильный логин или пароль"})
 
     if user.roleID == 1:
@@ -44,6 +45,39 @@ def auth_submit():
         return jsonify({"status": "success", "redirect": url_for('profile')})
 
     return jsonify({"status": "error", "message": "Ошибка авторизации"})
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        firstName = request.form['firstName'].strip()
+        lastName = request.form['lastName'].strip()
+        patronymic = request.form['patronymic'].strip()
+        phone = request.form['phone'].strip()
+        dateBirth = datetime.strptime(request.form['dateBirth'], '%Y-%m-%d')
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+
+        hashed_password = generate_password_hash(
+            password, method='pbkdf2:sha256')
+
+        new_user = User(
+            firstName=firstName,
+            lastName=lastName,
+            patronymic=patronymic,
+            phone=phone,
+            dateBirth=dateBirth,
+            username=username,
+            password=hashed_password,
+            roleID=4
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({"status": "success", "message": "Регистрация успешна"})
+
+    return render_template('register.html')
 
 
 @app.route('/get_models/<int:car_make_id>')
@@ -77,10 +111,6 @@ def submit():
     db.session.commit()
 
     default_status = Status.query.filter_by(ID=1).first()
-    if not default_status:
-        default_status = Status(status="Новая заявка")
-        db.session.add(default_status)
-        db.session.commit()
 
     new_repair_request = RepairRequest(
         carID=new_car.ID,
@@ -113,7 +143,7 @@ def get_repair_requests():
             'carModel': car_model.carModel,
             'defectsDescription': request.defectsDescription,
             'status': status.status,
-            'isAccepted': request.statusID != 1
+            'isAccepted': request.statusID == 32 or request.statusID == 33
 
         })
     return jsonify(requests_data)
@@ -196,7 +226,7 @@ def get_mechanics():
     # Получаем всех механиков
     all_mechanics = User.query.filter_by(roleID=3).all()
     # Получаем все заявки со статусом "В работе"
-    active_requests = RepairRequest.query.filter_by(statusID=2).all()
+    active_requests = RepairRequest.query.filter_by(statusID=32).all()
     # Получаем идентификаторы механиков, которые уже работают над заявками
     busy_mechanic_ids = [
         request.mechanicID for request in active_requests if request.mechanicID is not None]
@@ -213,10 +243,10 @@ def accept_request(request_id):
     repair_request = RepairRequest.query.get(request_id)
     if repair_request:
         mechanic_id = request.form['mechanicId']
-        repair_request.statusID = 2  # Обновляем статус на статус с ID 2
+        repair_request.statusID = 32  # Обновляем статус на статус с ID 2
         repair_request.mechanicID = mechanic_id  # Назначаем механика
         db.session.commit()
-        new_status = Status.query.get(2).status
+        new_status = Status.query.get(32).status
         return jsonify({'status': 'success', 'new_status': new_status})
     return jsonify({'status': 'error', 'message': 'Request not found'}), 404
 

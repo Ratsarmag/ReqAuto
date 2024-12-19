@@ -284,6 +284,25 @@ nav li {
   color: inherit;
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button-container button {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.button-container button:first-child {
+  margin-left: 0;
+}
+
+.button-container button:last-child {
+  margin-right: 0;
+}
+
 @media (max-width: 1200px) {
   nav li {
     font-size: 14px;

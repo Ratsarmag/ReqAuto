@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <section class="vertical-center-container horizontal-center-container">
+      <form class="form" action="/register" method="post">
+        <label class="h2 form-title">Регистрация</label>
+        <input
+          class="form-input h3"
+          type="text"
+          id="firstName"
+          name="firstName"
+          placeholder="Имя"
+          required
+        /><br />
+        <input
+          class="form-input h3"
+          type="text"
+          id="lastName"
+          name="lastName"
+          placeholder="Фамилия"
+          required
+        /><br />
+        <input
+          class="form-input h3"
+          type="text"
+          id="patronymic"
+          name="patronymic"
+          placeholder="Отчество"
+        /><br />
+        <input
+          class="form-input h3"
+          type="text"
+          id="phone"
+          name="phone"
+          placeholder="Телефон"
+          required
+        /><br />
+        <input
+          class="form-input h3"
+          type="date"
+          id="dateBirth"
+          name="dateBirth"
+          placeholder="Дата рождения"
+          required
+        /><br />
+        <input
+          class="form-input h3"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Логин"
+          required
+        /><br />
+        <input
+          class="form-input h3"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Пароль"
+          required
+        /><br />
+        <button class="button submit-button h3" type="submit">
+          Зарегистрироваться
+        </button>
+      </form>
+    </section>
+  </body>
+</html>

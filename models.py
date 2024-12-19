@@ -25,9 +25,10 @@ class User(db.Model):
     __tablename__ = 'User'
     ID = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(128))
     firstName = db.Column(db.String(50))
     lastName = db.Column(db.String(50))
+    patronymic = db.Column(db.String(50))
     phone = db.Column(db.String(15))
     dateBirth = db.Column(db.Date, nullable=True)
     roleID = db.Column(db.Integer, db.ForeignKey('Role.ID'))

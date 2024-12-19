@@ -22,7 +22,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
   if (!validatePhone(phone)) {
     showError(
       "Телефон",
-      "Пожалуйста, введите корректный номер телефона (11 цифр, начинается с 8)."
+      "Пожалуйста, введите корректный номер телефона (11 цифр, начинается с 7). Например, 79001231212"
     );
   }
 
@@ -36,7 +36,7 @@ function validateName(name) {
 }
 
 function validatePhone(phone) {
-  return /^\d{11}$/.test(phone) && phone.startsWith("8");
+  return /^\d{11}$/.test(phone) && phone.startsWith("7");
 }
 
 function allFieldsValid() {

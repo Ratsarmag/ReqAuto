@@ -30,7 +30,14 @@
           placeholder="Пароль"
           required
         /><br />
-        <button class="button submit-button h3" type="submit">Войти</button>
+        <div class="button-container">
+          <button class="button submit-button h3" type="submit">Войти</button>
+          <button class="button submit-button h3">
+            <a href="{{ url_for('register') }}" class="no-link-style"
+              >Регистрация</a
+            >
+          </button>
+        </div>
       </form>
     </section>
     <div id="errorModal" class="modal h2">
