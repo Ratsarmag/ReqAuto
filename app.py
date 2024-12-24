@@ -75,7 +75,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({"status": "success", "message": "Регистрация успешна"})
+        return redirect(url_for('auth'))
 
     return render_template('register.html')
 
