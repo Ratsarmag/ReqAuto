@@ -4,8 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://ratsa:RingLord24@RATSARMAG\SQLEXPRESS/practice?driver=ODBC+Driver+17+for+SQL+Server'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'
+#pp.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://ratsa:RingLord24@RATSARMAG\SQLEXPRESS/practice?driver=ODBC+Driver+17+for+SQL+Server'
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
@@ -110,13 +111,11 @@ def submit():
     db.session.add(new_car)
     db.session.commit()
 
-    default_status = Status.query.filter_by(ID=1).first()
-
     new_repair_request = RepairRequest(
         carID=new_car.ID,
         userID=new_user.ID,
         defectsDescription=defectsDescription,
-        statusID=default_status.ID
+        statusID=31
     )
     db.session.add(new_repair_request)
     db.session.commit()
@@ -166,7 +165,7 @@ def get_repair_request(request_id):
             'carModelID': car_model.ID,
             'defectsDescription': repair_request.defectsDescription
         })
-    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
+    return jsonify({'status': 'error', 'message': 'Заявка не найдена'}), 404
 
 
 @app.route('/api/repair-requests/<int:request_id>/edit', methods=['POST'])

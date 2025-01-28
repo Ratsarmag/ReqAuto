@@ -27,6 +27,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
   }
 
   if (allFieldsValid()) {
+    alert("Форма успешно отправлена");
     this.submit();
   }
 });

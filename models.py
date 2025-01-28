@@ -1,5 +1,7 @@
-from database import db
+#from database import db
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 class CarMake(db.Model):
     __tablename__ = 'CarMake'
