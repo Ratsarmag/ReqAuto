@@ -10,6 +10,30 @@
       href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function checkSessionAndRedirect() {
+        fetch("/check-session", {
+          method: "POST",
+          credentials: "same-origin",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.authenticated) {
+              if (data.role === "Администратор") {
+                window.location.href = "/admin_dashboard";
+              } else if (data.role === "Оператор") {
+                window.location.href = "/clients_requests";
+              } else if (data.role === "Механик") {
+                window.location.href = "/mechanic_dashboard";
+              } else if (data.role === "Клиент") {
+                window.location.href = "/profile";
+              }
+            } else {
+              window.location.href = "/auth";
+            }
+          });
+      }
+    </script>
   </head>
   <body>
     <header>
@@ -21,7 +45,7 @@
           <li><a href="#">Товары</a></li>
           <li><a href="#">Акции</a></li>
           <li><a href="#form">Записаться</a></li>
-          <li><a href="{{ url_for('auth') }}">Профиль</a></li>
+          <li><a href="#" onclick="checkSessionAndRedirect()">Профиль</a></li>
         </ul>
       </nav>
       <button class="toggle-menu-button">☰</button>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Редактировать профиль</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
+          <li><a href="{{ url_for('profile') }}">Профиль</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="horizontal-center-container">
+        <form
+          class="form"
+          action="{{ url_for('edit_profile') }}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <h2>Редактировать профиль</h2>
+          <input
+            class="form-input"
+            type="text"
+            name="firstName"
+            value="{{ user.firstName }}"
+            placeholder="Имя"
+            required
+          />
+          <input
+            class="form-input"
+            type="text"
+            name="lastName"
+            value="{{ user.lastName }}"
+            placeholder="Фамилия"
+            required
+          />
+          <input
+            class="form-input"
+            type="text"
+            name="patronymic"
+            value="{{ user.patronymic }}"
+            placeholder="Отчество"
+          />
+          <input
+            class="form-input"
+            type="text"
+            name="phone"
+            value="{{ user.phone }}"
+            placeholder="Телефон"
+            required
+          />
+          <input
+            class="form-input"
+            type="date"
+            name="dateBirth"
+            value="{{ user.dateBirth.strftime('%Y-%m-%d') }}"
+            required
+          />
+          <input class="form-input" type="file" name="photo" accept="image/*" />
+          <button class="button submit-button" type="submit">Сохранить</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

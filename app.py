@@ -1,12 +1,13 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
-from models import db, User, Car, RepairRequest, Status, CarMake, CarModel
+from flask import Flask, request, render_template, redirect, url_for, jsonify, session, make_response
+from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'
-#pp.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://ratsa:RingLord24@RATSARMAG\SQLEXPRESS/practice?driver=ODBC+Driver+17+for+SQL+Server'
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = '46aed87c7b79f71e5f6c420140b4726eda4af85315ec49aa63959f1403a4703e'
 db.init_app(app)
 
 
@@ -23,7 +24,84 @@ def auth():
 
 @app.route('/clients_requests')
 def clients_requests():
-    return render_template('clients_requests.html')
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 2:
+        return redirect(url_for('auth'))
+
+    response = make_response(render_template('clients_requests.html'))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    response = make_response(render_template('profile.html', user=user))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if request.method == 'POST':
+        user.firstName = request.form['firstName']
+        user.lastName = request.form['lastName']
+        user.patronymic = request.form['patronymic']
+        user.phone = request.form['phone']
+        user.dateBirth = datetime.strptime(
+            request.form['dateBirth'], '%Y-%m-%d')
+
+        if 'photo' in request.files:
+            photo = request.files['photo']
+            if photo.filename != '':
+                photo_path = f"static/uploads/{secure_filename(photo.filename)}"
+                photo.save(photo_path)
+                user.photo = photo_path
+
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    return render_template('edit_profile.html', user=user)
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    response = make_response(redirect(url_for('auth')))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+
+@app.route('/check-session', methods=['POST'])
+def check_session():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        role = Role.query.get(user.roleID).roleName
+        return jsonify({"authenticated": True, "role": role})
+    return jsonify({"authenticated": False}), 401
 
 
 @app.route('/auth-submit', methods=['POST'])
@@ -35,6 +113,8 @@ def auth_submit():
 
     if not user or not check_password_hash(user.password, password):
         return jsonify({"status": "error", "message": "Неправильный логин или пароль"})
+
+    session['user_id'] = user.ID
 
     if user.roleID == 1:
         return jsonify({"status": "success", "redirect": url_for('admin_dashboard')})
@@ -62,6 +142,9 @@ def register():
         hashed_password = generate_password_hash(
             password, method='pbkdf2:sha256')
 
+        default_photo_path = url_for(
+            'static', filename='uploads/no_image-600x315_0.jpg')
+
         new_user = User(
             firstName=firstName,
             lastName=lastName,
@@ -70,7 +153,8 @@ def register():
             dateBirth=dateBirth,
             username=username,
             password=hashed_password,
-            roleID=4
+            roleID=4,
+            photo=default_photo_path
         )
 
         db.session.add(new_user)
@@ -115,7 +199,7 @@ def submit():
         carID=new_car.ID,
         userID=new_user.ID,
         defectsDescription=defectsDescription,
-        statusID=31
+        statusID=1
     )
     db.session.add(new_repair_request)
     db.session.commit()
@@ -142,7 +226,7 @@ def get_repair_requests():
             'carModel': car_model.carModel,
             'defectsDescription': request.defectsDescription,
             'status': status.status,
-            'isAccepted': request.statusID == 32 or request.statusID == 33
+            'isAccepted': request.statusID == 2 or request.statusID == 3
 
         })
     return jsonify(requests_data)
@@ -222,14 +306,10 @@ def get_car_model(car_model_id):
 
 @app.route('/api/mechanics', methods=['GET'])
 def get_mechanics():
-    # Получаем всех механиков
     all_mechanics = User.query.filter_by(roleID=3).all()
-    # Получаем все заявки со статусом "В работе"
-    active_requests = RepairRequest.query.filter_by(statusID=32).all()
-    # Получаем идентификаторы механиков, которые уже работают над заявками
+    active_requests = RepairRequest.query.filter_by(statusID=2).all()
     busy_mechanic_ids = [
         request.mechanicID for request in active_requests if request.mechanicID is not None]
-    # Фильтруем механиков, которые не работают над заявками
     available_mechanics = [
         mechanic for mechanic in all_mechanics if mechanic.ID not in busy_mechanic_ids]
     mechanics_data = [{'ID': mechanic.ID, 'firstName': mechanic.firstName,
@@ -242,10 +322,10 @@ def accept_request(request_id):
     repair_request = RepairRequest.query.get(request_id)
     if repair_request:
         mechanic_id = request.form['mechanicId']
-        repair_request.statusID = 32  # Обновляем статус на статус с ID 2
-        repair_request.mechanicID = mechanic_id  # Назначаем механика
+        repair_request.statusID = 2
+        repair_request.mechanicID = mechanic_id
         db.session.commit()
-        new_status = Status.query.get(32).status
+        new_status = Status.query.get(2).status
         return jsonify({'status': 'success', 'new_status': new_status})
     return jsonify({'status': 'error', 'message': 'Request not found'}), 404
 

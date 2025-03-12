@@ -5,15 +5,11 @@ function submitRegistrationForm() {
     data: $("#registration-form").serialize(),
     success: function (response) {
       if (response.status === "success") {
-        // Показываем сообщение об успехе
         showMessage(response.message);
-
-        // Перенаправляем пользователя на страницу авторизации
         setTimeout(function () {
           window.location.href = response.redirect_url;
-        }, 2000); // Ждем 2 секунды перед перенаправлением
+        }, 2000);
       } else {
-        // Обработка ошибок
         showMessage(response.message, "error");
       }
     },

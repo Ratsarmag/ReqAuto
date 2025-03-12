@@ -70,6 +70,8 @@ nav ul {
 nav a {
   text-decoration: none;
   color: #fff;
+  display: flex;
+  justify-content: center;
 }
 
 nav a:hover {
@@ -81,8 +83,11 @@ nav li {
   font-family: "Montserrat", sans-serif;
   font-weight: 100;
   text-transform: uppercase;
-  margin: 15px 30px 15px 0px;
+  margin: 15px 30px 15px 0;
   font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .active {
@@ -222,7 +227,7 @@ nav li {
   border-radius: 6px;
   border: 2px solid #dcddde;
   background: url(assets/loupe-search.svg) no-repeat 10px center;
-  background-size: auto 70%;
+  background-size: auto 45%;
   padding-left: 50px;
   box-sizing: border-box;
   color: #fff;
@@ -301,6 +306,76 @@ nav li {
 
 .button-container button:last-child {
   margin-right: 0;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button svg {
+  width: 48px;
+  height: 48px;
+}
+
+.logout-button:hover svg path {
+  fill: #ff9640;
+}
+
+.profile-section {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.profile-avatar {
+  margin-right: 40px;
+}
+
+.profile-avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+  display: flex;
+  flex: 1;
+  gap: 40px;
+}
+
+.profile-column {
+  flex: 1;
+}
+
+.profile-field {
+  margin-bottom: 20px;
+}
+
+.profile-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 300;
+}
+
+.profile-field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+}
+
+.profile-field input[readonly] {
+  background-color: #f0f0f0;
 }
 
 @media (max-width: 1200px) {

@@ -1,7 +1,8 @@
-#from database import db
+# from database import db
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
 
 class CarMake(db.Model):
     __tablename__ = 'CarMake'
@@ -34,6 +35,7 @@ class User(db.Model):
     phone = db.Column(db.String(15))
     dateBirth = db.Column(db.Date, nullable=True)
     roleID = db.Column(db.Integer, db.ForeignKey('Role.ID'))
+    photo = db.Column(db.String(256), nullable=True)
 
 
 class Role(db.Model):

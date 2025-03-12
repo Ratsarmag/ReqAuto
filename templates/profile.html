@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профиль</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/profile.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li style="margin-top: 0; margin-bottom: 0">
+            <a href="{{ url_for('index') }}">Главная</a>
+          </li>
+          <li style="margin-top: 0; margin-bottom: 0">
+            <a href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
+          </li>
+          <li style="margin-top: 0; margin-bottom: 0">
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="profile-section">
+        <div class="profile-avatar">
+          <img src="{{ user.photo }}" alt="Аватар профиля" />
+        </div>
+        <div class="profile-info">
+          <div class="profile-column">
+            <div class="profile-field">
+              <label for="firstName">Имя:</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value="{{ user.firstName }}"
+                readonly
+              />
+            </div>
+            <div class="profile-field">
+              <label for="patronymic">Отчество:</label>
+              <input
+                type="text"
+                id="patronymic"
+                name="patronymic"
+                value="{{ user.patronymic }}"
+                readonly
+              />
+            </div>
+            <div class="profile-field">
+              <label for="lastName">Фамилия:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value="{{ user.lastName }}"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="profile-column">
+            <div class="profile-field">
+              <label for="phone">Телефон:</label>
+              <input
+                type="text"
+                id="phone"
+                name="phone"
+                value="{{ user.phone }}"
+                readonly
+              />
+            </div>
+            <div class="profile-field">
+              <label for="dateBirth">Дата рождения:</label>
+              <input
+                type="date"
+                id="dateBirth"
+                name="dateBirth"
+                value="{{ user.dateBirth.strftime('%Y-%m-%d') }}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
