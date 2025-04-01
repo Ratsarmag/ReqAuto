@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 from datetime import datetime
-from models import db, CarMake, CarModel, Car, User, Role, Status, RepairRequest
+from models import db, CarMake, CarModel, Car, User, Role, Status, RepairRequest, Notification
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'
@@ -14,28 +14,24 @@ def init_db():
     with app.app_context():
         db.create_all()
 
-        # Создание ролей
         roles = ['Администратор', 'Оператор', 'Механик', 'Клиент']
         for role_name in roles:
             role = Role(roleName=role_name)
             db.session.add(role)
         db.session.commit()
 
-        # Создание статусов
         statuses = ['Новая заявка', 'В работе', 'Завершена']
         for status_name in statuses:
             status = Status(status=status_name)
             db.session.add(status)
         db.session.commit()
 
-        # Создание марок автомобилей
         car_makes = ['Toyota', 'Ford', 'BMW', 'Audi']
         for make in car_makes:
             car_make = CarMake(carMake=make)
             db.session.add(car_make)
         db.session.commit()
 
-        # Создание моделей автомобилей
         car_models = [
             ('Corolla', 1), ('Focus', 2), ('X5', 3), ('A4', 4),
             ('Camry', 1), ('Mustang', 2), ('3 Series', 3), ('Q5', 4),

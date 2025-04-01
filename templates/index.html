@@ -101,6 +101,7 @@
             id="firstName"
             name="firstName"
             style="margin-top: 25px"
+            value="{{ user_data.firstName if user_data else '' }}"
             placeholder="Имя"
             required
           /><br />
@@ -109,6 +110,7 @@
             type="text"
             id="lastName"
             name="lastName"
+            value="{{ user_data.lastName if user_data else '' }}"
             placeholder="Фамилия"
             required
           /><br />
@@ -117,6 +119,7 @@
             type="text"
             id="phone"
             name="phone"
+            value="{{ user_data.phone if user_data else '' }}"
             placeholder="Телефон"
             required
           /><br />

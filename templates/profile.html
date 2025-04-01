@@ -12,13 +12,41 @@
       <div class="logo">ReqAuto</div>
       <nav>
         <ul>
-          <li style="margin-top: 0; margin-bottom: 0">
+          <li>
             <a href="{{ url_for('index') }}">Главная</a>
           </li>
-          <li style="margin-top: 0; margin-bottom: 0">
+          <li>
             <a href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
           </li>
-          <li style="margin-top: 0; margin-bottom: 0">
+          <li class="notifications-wrapper">
+            <button id="notifications-toggle" class="notifications-button">
+              <svg
+                fill="#ffffff"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    d="M10,20h4a2,2,0,0,1-4,0Zm8-4V10a6,6,0,0,0-5-5.91V3a1,1,0,0,0-2,0V4.09A6,6,0,0,0,6,10v6L4,18H20Z"
+                  ></path>
+                </g>
+              </svg>
+            </button>
+            <div
+              id="notifications-container"
+              class="notifications-container"
+            ></div>
+          </li>
+          <li>
             <form
               action="{{ url_for('logout') }}"
               method="post"
@@ -43,6 +71,7 @@
       </nav>
     </header>
     <main>
+      <div id="notifications-container" class="notifications-container"></div>
       <section class="profile-section">
         <div class="profile-avatar">
           <img src="{{ user.photo }}" alt="Аватар профиля" />
@@ -104,6 +133,12 @@
           </div>
         </div>
       </section>
+      <section class="requests-section">
+        <p class="centered-heading">Мои заявки</p>
+        <div id="requests-container" class="centered-container"></div>
+      </section>
     </main>
+    <script src="/static/profileRequests.js"></script>
+    <script src="/static/notification.js"></script>
   </body>
 </html>

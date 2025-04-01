@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify, session, make_response
-from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role
+from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -14,7 +14,44 @@ db.init_app(app)
 @app.route('/')
 def index():
     car_makes = CarMake.query.all()
-    return render_template('index.html', car_makes=car_makes)
+    user_data = None
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        user_data = {
+            'firstName': user.firstName,
+            'lastName': user.lastName,
+            'patronymic': user.patronymic,
+            'phone': user.phone
+        }
+
+    return render_template('index.html', car_makes=car_makes, user_data=user_data)
+
+
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 1:
+        return redirect(url_for('auth'))
+
+    users = User.query.join(Role).add_columns(
+        User.ID, User.firstName, User.lastName, User.patronymic, Role.roleName).all()
+    repair_requests = RepairRequest.query.all()
+
+    total_requests = len(repair_requests)
+    new_requests = RepairRequest.query.filter_by(statusID=1).count()
+    in_progress_requests = RepairRequest.query.filter_by(statusID=2).count()
+    completed_requests = RepairRequest.query.filter_by(statusID=3).count()
+
+    return render_template('admin_dashboard.html', users=users, total_requests=total_requests,
+                           new_requests=new_requests, in_progress_requests=in_progress_requests,
+                           completed_requests=completed_requests)
 
 
 @app.route('/auth')
@@ -180,13 +217,18 @@ def submit():
     carModelID = request.form['carModel']
     defectsDescription = request.form['defectsDescription']
 
-    new_user = User(
-        firstName=firstName,
-        lastName=lastName,
-        phone=phone
-    )
-    db.session.add(new_user)
-    db.session.commit()
+    if 'user_id' not in session:
+        new_user = User(
+            firstName=firstName,
+            lastName=lastName,
+            phone=phone,
+            roleID=4
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        user_id = new_user.ID
+    else:
+        user_id = session['user_id']
 
     new_car = Car(
         carMakeID=carMakeID,
@@ -197,7 +239,7 @@ def submit():
 
     new_repair_request = RepairRequest(
         carID=new_car.ID,
-        userID=new_user.ID,
+        userID=user_id,
         defectsDescription=defectsDescription,
         statusID=1
     )
@@ -252,6 +294,41 @@ def get_repair_request(request_id):
     return jsonify({'status': 'error', 'message': 'Заявка не найдена'}), 404
 
 
+@app.route('/api/user-repair-requests', methods=['GET'])
+def get_user_repair_requests():
+    if 'user_id' not in session:
+        return jsonify([]), 403
+
+    user_id = session['user_id']
+    repair_requests = RepairRequest.query.filter_by(userID=user_id).all()
+
+    requests_data = []
+    for index, request in enumerate(repair_requests, start=1):
+        user = User.query.get(request.userID)
+        car = Car.query.get(request.carID)
+        car_make = CarMake.query.get(car.carMakeID)
+        car_model = CarModel.query.get(car.carModelID)
+        status = Status.query.get(request.statusID)
+
+        request_data = {
+            'number': index,
+            'id': request.ID,
+            'firstName': user.firstName,
+            'lastName': user.lastName,
+            'phone': user.phone,
+            'carMake': car_make.carMake,
+            'carModel': car_model.carModel,
+            'defectsDescription': request.defectsDescription,
+            'status': status.status,
+            'created_at': request.created_at,
+            'accepted_at': request.accepted_at,
+            'completed_at': request.completed_at
+        }
+        requests_data.append(request_data)
+
+    return jsonify(requests_data)
+
+
 @app.route('/api/repair-requests/<int:request_id>/edit', methods=['POST'])
 def edit_request(request_id):
     repair_request = RepairRequest.query.get(request_id)
@@ -284,8 +361,20 @@ def edit_request(request_id):
         repair_request.defectsDescription = request.form['defectsDescription']
 
         db.session.commit()
+
+        user_requests = RepairRequest.query.filter_by(
+            userID=repair_request.userID).order_by(RepairRequest.created_at).all()
+        request_number = user_requests.index(repair_request) + 1
+
+        notification = Notification(
+            userID=repair_request.userID,
+            message=f"Ваша заявка под номером #{request_number} была отредактирована оператором сервиса"
+        )
+        db.session.add(notification)
+        db.session.commit()
+
         return jsonify({'status': 'success'})
-    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
+    return jsonify({'status': 'error', 'message': 'Заявка не найдена'}), 404
 
 
 @app.route('/api/car-make/<int:car_make_id>', methods=['GET'])
@@ -293,7 +382,7 @@ def get_car_make(car_make_id):
     car_make = CarMake.query.get(car_make_id)
     if car_make:
         return jsonify({'carMake': car_make.carMake})
-    return jsonify({'status': 'error', 'message': 'Car make not found'}), 404
+    return jsonify({'status': 'error', 'message': 'Марка автомобиля не найдена'}), 404
 
 
 @app.route('/api/car-model/<int:car_model_id>', methods=['GET'])
@@ -301,7 +390,7 @@ def get_car_model(car_model_id):
     car_model = CarModel.query.get(car_model_id)
     if car_model:
         return jsonify({'carModel': car_model.carModel})
-    return jsonify({'status': 'error', 'message': 'Car model not found'}), 404
+    return jsonify({'status': 'error', 'message': 'Модель автомобиля не найдена'}), 404
 
 
 @app.route('/api/mechanics', methods=['GET'])
@@ -323,11 +412,60 @@ def accept_request(request_id):
     if repair_request:
         mechanic_id = request.form['mechanicId']
         repair_request.statusID = 2
+        repair_request.accepted_at = datetime.utcnow()
         repair_request.mechanicID = mechanic_id
         db.session.commit()
         new_status = Status.query.get(2).status
+
+        user_requests = RepairRequest.query.filter_by(
+            userID=repair_request.userID).order_by(RepairRequest.created_at).all()
+        request_number = user_requests.index(repair_request) + 1
+
+        notification = Notification(
+            userID=repair_request.userID,
+            message=f"Ваша заявка под номером #{request_number} принята в работу"
+        )
+        db.session.add(notification)
+        db.session.commit()
+
         return jsonify({'status': 'success', 'new_status': new_status})
-    return jsonify({'status': 'error', 'message': 'Request not found'}), 404
+    return jsonify({'status': 'error', 'message': 'Заявка не найдена'}), 404
+
+
+@app.route('/api/notifications', methods=['GET'])
+def get_notifications():
+    if 'user_id' not in session:
+        return jsonify([]), 403
+
+    user_id = session['user_id']
+    notifications = Notification.query.filter_by(userID=user_id).all()
+
+    notifications_data = [
+        {
+            "message": notification.message,
+            "created_at": notification.created_at,
+            "read": notification.read
+        }
+        for notification in notifications
+    ]
+
+    return jsonify(notifications_data)
+
+
+@app.route('/api/notifications/mark-all-as-read', methods=['POST'])
+def mark_all_as_read():
+    if 'user_id' not in session:
+        return jsonify({"status": "error", "message": "Пользователь не авторизован"}), 403
+
+    user_id = session['user_id']
+    notifications = Notification.query.filter_by(
+        userID=user_id, read=False).all()
+
+    for notification in notifications:
+        notification.read = True
+
+    db.session.commit()
+    return jsonify({"status": "success"})
 
 
 if __name__ == '__main__':

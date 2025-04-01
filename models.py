@@ -1,5 +1,5 @@
-# from database import db
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -58,3 +58,15 @@ class RepairRequest(db.Model):
     defectsDescription = db.Column(db.String)
     statusID = db.Column(db.Integer, db.ForeignKey('Status.ID'))
     mechanicID = db.Column(db.Integer, db.ForeignKey('User.ID'), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    accepted_at = db.Column(db.DateTime, nullable=True)
+    completed_at = db.Column(db.DateTime, nullable=True)
+
+
+class Notification(db.Model):
+    __tablename__ = 'Notification'
+    ID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey('User.ID'), nullable=False)
+    message = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    read = db.Column(db.Boolean, default=False)
