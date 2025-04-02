@@ -24,9 +24,8 @@
           method="post"
           enctype="multipart/form-data"
         >
-          <h2>Редактировать профиль</h2>
           <input
-            class="form-input"
+            class="form-input h3"
             type="text"
             name="firstName"
             value="{{ user.firstName }}"
@@ -34,7 +33,7 @@
             required
           />
           <input
-            class="form-input"
+            class="form-input h3"
             type="text"
             name="lastName"
             value="{{ user.lastName }}"
@@ -42,14 +41,14 @@
             required
           />
           <input
-            class="form-input"
+            class="form-input h3"
             type="text"
             name="patronymic"
             value="{{ user.patronymic }}"
             placeholder="Отчество"
           />
           <input
-            class="form-input"
+            class="form-input h3"
             type="text"
             name="phone"
             value="{{ user.phone }}"
@@ -57,14 +56,21 @@
             required
           />
           <input
-            class="form-input"
+            class="form-input h3"
             type="date"
             name="dateBirth"
             value="{{ user.dateBirth.strftime('%Y-%m-%d') }}"
             required
           />
-          <input class="form-input" type="file" name="photo" accept="image/*" />
-          <button class="button submit-button" type="submit">Сохранить</button>
+          <input
+            class="form-input h3"
+            type="file"
+            name="photo"
+            accept="image/*"
+          />
+          <button class="button h3 submit-button" type="submit">
+            Сохранить
+          </button>
         </form>
       </section>
     </main>

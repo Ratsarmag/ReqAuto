@@ -40,10 +40,10 @@ def admin_dashboard():
     if user.roleID != 1:
         return redirect(url_for('auth'))
 
-    users = User.query.join(Role).add_columns(
-        User.ID, User.firstName, User.lastName, User.patronymic, Role.roleName).all()
+    users = User.query.all()
     repair_requests = RepairRequest.query.all()
 
+    # Статистика по заявкам
     total_requests = len(repair_requests)
     new_requests = RepairRequest.query.filter_by(statusID=1).count()
     in_progress_requests = RepairRequest.query.filter_by(statusID=2).count()
@@ -393,6 +393,13 @@ def get_car_model(car_model_id):
     return jsonify({'status': 'error', 'message': 'Модель автомобиля не найдена'}), 404
 
 
+@app.route('/api/roles', methods=['GET'])
+def get_roles():
+    roles = Role.query.all()
+    roles_data = [{"ID": role.ID, "roleName": role.roleName} for role in roles]
+    return jsonify(roles_data)
+
+
 @app.route('/api/mechanics', methods=['GET'])
 def get_mechanics():
     all_mechanics = User.query.filter_by(roleID=3).all()
@@ -430,6 +437,69 @@ def accept_request(request_id):
 
         return jsonify({'status': 'success', 'new_status': new_status})
     return jsonify({'status': 'error', 'message': 'Заявка не найдена'}), 404
+
+
+@app.route('/delete_user/<int:user_id>', methods=['POST'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"status": "success"})
+    return jsonify({"status": "error", "message": "User not found"}), 404
+
+
+@app.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    roles = Role.query.all()
+
+    if request.method == 'POST':
+        user.firstName = request.form['firstName']
+        user.lastName = request.form['lastName']
+        user.patronymic = request.form['patronymic']
+        user.phone = request.form['phone']
+        user.roleID = request.form['roleID']
+
+        if 'username' in request.form and request.form['username']:
+            user.username = request.form['username']
+        if 'password' in request.form and request.form['password']:
+            user.password = generate_password_hash(request.form['password'])
+
+        db.session.commit()
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('edit_user.html', user=user, roles=roles)
+
+
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+    roles = Role.query.all()
+
+    if request.method == 'POST':
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        patronymic = request.form['patronymic']
+        phone = request.form['phone']
+        roleID = request.form['roleID']
+        username = request.form['username']
+        password = request.form['password']
+
+        new_user = User(
+            firstName=firstName,
+            lastName=lastName,
+            patronymic=patronymic,
+            phone=phone,
+            roleID=roleID,
+            username=username,
+            password=generate_password_hash(password)
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('create_user.html', roles=roles)
 
 
 @app.route('/api/notifications', methods=['GET'])

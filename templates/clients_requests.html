@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Заявки на ремонт</title>
     <link rel="stylesheet" href="/static\styles.css" />
+    <link rel="stylesheet" href="/static/operator.css" />
     <script src="/static/cardRequests.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="/static/updateModels.js" defer></script>
@@ -32,6 +33,7 @@
       <div class="logo">ReqAuto</div>
       <nav>
         <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
           <li><a href="#" class="active">Заявки</a></li>
           <li>
             <form

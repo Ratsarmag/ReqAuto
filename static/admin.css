@@ -1,7 +1,21 @@
-.admin-table-container {
+nav ul {
+  list-style: none;
+  padding-left: 0;
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  margin: 0;
+}
+
+.admin-controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.admin-table-container {
+  width: 100%;
 }
 
 .admin-table {
@@ -18,14 +32,14 @@
   font-weight: bold;
   padding: 12px;
   text-align: center;
-  border: none; /* Убираем границы */
+  border: none;
 }
 
 .admin-table td {
   padding: 12px;
   text-align: center;
-  border: none; /* Убираем границы */
-  vertical-align: top; /* Вертикальное выравнивание по верху */
+  border: none;
+  vertical-align: top;
 }
 
 .admin-table tr:nth-child(even) {
@@ -36,16 +50,39 @@
   background-color: #f1f1f1;
 }
 
-.admin-table .button {
-  background-color: #ff9640;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.button:hover {
+  color: #fafbfb;
 }
 
-.admin-table .button:hover {
-  background-color: #e0833e;
+.button-delete {
+  background-color: #ff4d4d;
+  color: #fafbfb;
+}
+
+.button-delete:hover {
+  background-color: #ff1a1a;
+}
+
+.button-edit {
+  background-color: #4169e1;
+  color: #fafbfb;
+}
+
+.button-cancel {
+  background-color: #828282;
+  color: #fafbfb;
+}
+
+.button-create {
+  align-self: flex-start;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  background-color: #828282;
+  color: #fafbfb;
+}
+
+.button-edit,
+.button-delete,
+.button-create {
+  margin-right: 10px;
 }
