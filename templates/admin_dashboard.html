@@ -14,7 +14,7 @@
         <ul>
           <li><a href="{{ url_for('index') }}">Главная</a></li>
           <li><a href="#" class="active">Пользователи</a></li>
-          <li><a href="#">Статистика</a></li>
+          <li><a href="{{ url_for('admin_statistics') }}">Статистика</a></li>
           <li>
             <form
               action="{{ url_for('logout') }}"
@@ -88,26 +88,6 @@
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
-      <section class="statistics-section">
-        <h2 class="h2">Статистика заявок</h2>
-        <div class="statistics-card card">
-          <p>
-            Общее количество заявок:
-            <span class="light-text">{{ total_requests }}</span>
-          </p>
-          <p>
-            Новые заявки: <span class="light-text">{{ new_requests }}</span>
-          </p>
-          <p>
-            Заявки в работе:
-            <span class="light-text">{{ in_progress_requests }}</span>
-          </p>
-          <p>
-            Завершенные заявки:
-            <span class="light-text">{{ completed_requests }}</span>
-          </p>
         </div>
       </section>
       <div id="deleteModal" class="modal">

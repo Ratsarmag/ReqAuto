@@ -2,8 +2,10 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify, s
 from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
+from sqlalchemy import func
+from collections import defaultdict
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'
@@ -43,15 +45,7 @@ def admin_dashboard():
     users = User.query.all()
     repair_requests = RepairRequest.query.all()
 
-    # Статистика по заявкам
-    total_requests = len(repair_requests)
-    new_requests = RepairRequest.query.filter_by(statusID=1).count()
-    in_progress_requests = RepairRequest.query.filter_by(statusID=2).count()
-    completed_requests = RepairRequest.query.filter_by(statusID=3).count()
-
-    return render_template('admin_dashboard.html', users=users, total_requests=total_requests,
-                           new_requests=new_requests, in_progress_requests=in_progress_requests,
-                           completed_requests=completed_requests)
+    return render_template('admin_dashboard.html', users=users)
 
 
 @app.route('/auth')
@@ -536,6 +530,71 @@ def mark_all_as_read():
 
     db.session.commit()
     return jsonify({"status": "success"})
+
+
+def calculate_average_completion_time():
+    completed_requests = RepairRequest.query.filter(
+        RepairRequest.completed_at.isnot(None)).all()
+
+    total_time = timedelta()
+    for request in completed_requests:
+        if request.created_at and request.completed_at:
+            total_time += request.completed_at - request.created_at
+
+    if len(completed_requests) > 0:
+        avg_time = total_time / len(completed_requests)
+        return avg_time.days
+    return 0
+
+
+def calculate_requests_by_hour():
+    # Извлечение данных о времени создания заявок и группировка по часам
+    requests_by_hour = db.session.query(
+        func.strftime('%H', RepairRequest.created_at).label('hour'),
+        func.count(RepairRequest.ID).label('count')
+    ).group_by(func.strftime('%H', RepairRequest.created_at)).all()
+
+    # Преобразование данных в список словарей для удобства использования
+    requests_by_hour_list = [
+        {"hour": int(hour), "count": count} for hour, count in requests_by_hour]
+
+    return requests_by_hour_list
+
+
+@app.route('/admin_statistics')
+def admin_statistics():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 1:
+        return redirect(url_for('auth'))
+
+    total_users = User.query.count()
+    roles = Role.query.all()
+    users_by_role = {role.roleName: User.query.filter_by(
+        roleID=role.ID).count() for role in roles}
+
+    total_requests = RepairRequest.query.count()
+    new_requests = RepairRequest.query.filter_by(statusID=1).count()
+    in_progress_requests = RepairRequest.query.filter_by(statusID=2).count()
+    completed_requests = RepairRequest.query.filter_by(statusID=3).count()
+
+    avg_completion_time = calculate_average_completion_time()
+
+    requests_by_hour = calculate_requests_by_hour()
+
+    return render_template('admin_statistics.html',
+                           total_users=total_users,
+                           users_by_role=users_by_role,
+                           total_requests=total_requests,
+                           new_requests=new_requests,
+                           in_progress_requests=in_progress_requests,
+                           completed_requests=completed_requests,
+                           avg_completion_time=avg_completion_time,
+                           requests_by_hour=requests_by_hour)
 
 
 if __name__ == '__main__':

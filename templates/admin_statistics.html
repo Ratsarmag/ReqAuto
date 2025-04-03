@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Статистика</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/admin.css" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/static/chart.js"></script>
+    <script src="/static/header.js"></script>
+    <script src="/static/averageCompletionTime.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
+          <li><a href="{{ url_for('admin_dashboard') }}">Пользователи</a></li>
+          <li>
+            <a href="{{ url_for('admin_statistics') }}" class="active"
+              >Статистика</a
+            >
+          </li>
+          <li>
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      <button class="toggle-menu-button">☰</button>
+    </header>
+    <main>
+      <section class="statistics-section h3">
+        <div class="statistics-card card">
+          <p class="h2">Статистика пользователей</p>
+          <p>
+            Общее количество пользователей:
+            <span class="light-text">{{ total_users }}</span>
+          </p>
+          {% for role, count in users_by_role.items() %}
+          <p>- {{ role }}: <span class="light-text">{{ count }}</span></p>
+          {% endfor %}
+        </div>
+
+        <div class="statistics-card card">
+          <p class="h2">Статистика заявок</p>
+          <p>
+            Общее количество заявок:
+            <span class="light-text">{{ total_requests }}</span>
+          </p>
+          <p>
+            - Новые заявки: <span class="light-text">{{ new_requests }}</span>
+          </p>
+          <p>
+            - Заявки в работе:
+            <span class="light-text">{{ in_progress_requests }}</span>
+          </p>
+          <p>
+            - Завершенные заявки:
+            <span class="light-text">{{ completed_requests }}</span>
+          </p>
+          <p>
+            - Среднее время выполнения заявок:
+            <span
+              class="light-text"
+              id="avgCompletionTime"
+              data-time="{{ avg_completion_time }}"
+            ></span>
+          </p>
+        </div>
+      </section>
+      <section class="horizontal-center-container">
+        <div
+          id="requestsByHourChart"
+          style="width: 100%; max-width: 600px"
+        ></div>
+      </section>
+    </main>
+    <script id="requestsByHourData" type="application/json">
+      {{ requests_by_hour | tojson }}
+    </script>
+  </body>
+</html>

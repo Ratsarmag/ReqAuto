@@ -86,3 +86,29 @@ nav ul {
 .button-create {
   margin-right: 10px;
 }
+
+.statistics-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.statistics-card {
+  flex: 1 1 45%;
+  box-sizing: border-box;
+  max-width: 45%;
+}
+.statistics-card .h2,
+.statistics-card .h3 {
+  text-align: center;
+}
+.statistics-card p {
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .statistics-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
