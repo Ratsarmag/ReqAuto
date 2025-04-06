@@ -5,16 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Редактировать профиль</title>
     <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/profile.css" />
   </head>
   <body>
     <header>
       <div class="logo">ReqAuto</div>
       <nav>
         <ul>
-          <li><a href="{{ url_for('index') }}">Главная</a></li>
-          <li><a href="{{ url_for('profile') }}">Профиль</a></li>
+          <li>
+            <a href="{{ url_for('index') }}">Главная</a>
+          </li>
+          <li>
+            <a href="{{ url_for('profile') }}">Профиль</a>
+          </li>
+          <li>
+            <a href="#" class="active">Редактировать профиль</a>
+          </li>
+          <li>
+            <a href="{{ url_for('profile_requests') }}">Мои заявки</a>
+          </li>
+          <li class="notifications-wrapper">
+            <button id="notifications-toggle" class="notifications-button">
+              <svg
+                fill="#ffffff"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#ffffff"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    d="M10,20h4a2,2,0,0,1-4,0Zm8-4V10a6,6,0,0,0-5-5.91V3a1,1,0,0,0-2,0V4.09A6,6,0,0,0,6,10v6L4,18H20Z"
+                  ></path>
+                </g>
+              </svg>
+            </button>
+            <div
+              id="notifications-container"
+              class="notifications-container"
+            ></div>
+          </li>
+          <li>
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
         </ul>
       </nav>
+      <button class="toggle-menu-button">☰</button>
     </header>
     <main>
       <section class="horizontal-center-container">
@@ -74,5 +135,6 @@
         </form>
       </section>
     </main>
+    <script src="/static/notification.js"></script>
   </body>
 </html>

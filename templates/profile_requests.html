@@ -16,13 +16,13 @@
             <a href="{{ url_for('index') }}">Главная</a>
           </li>
           <li>
-            <a href="#" class="active">Профиль</a>
+            <a href="{{ url_for('profile') }}">Профиль</a>
           </li>
           <li>
             <a href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
           </li>
           <li>
-            <a href="{{ url_for('profile_requests') }}">Мои заявки</a>
+            <a href="#" class="active">Мои заявки</a>
           </li>
           <li class="notifications-wrapper">
             <button id="notifications-toggle" class="notifications-button">
@@ -79,68 +79,11 @@
     </header>
     <main>
       <div id="notifications-container" class="notifications-container"></div>
-      <section class="profile-section">
-        <div class="profile-avatar">
-          <img src="{{ user.photo }}" alt="Аватар профиля" />
-        </div>
-        <div class="profile-info">
-          <div class="profile-column">
-            <div class="profile-field">
-              <label for="firstName">Имя:</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value="{{ user.firstName }}"
-                readonly
-              />
-            </div>
-            <div class="profile-field">
-              <label for="patronymic">Отчество:</label>
-              <input
-                type="text"
-                id="patronymic"
-                name="patronymic"
-                value="{{ user.patronymic }}"
-                readonly
-              />
-            </div>
-            <div class="profile-field">
-              <label for="lastName">Фамилия:</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value="{{ user.lastName }}"
-                readonly
-              />
-            </div>
-          </div>
-          <div class="profile-column">
-            <div class="profile-field">
-              <label for="phone">Телефон:</label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                value="{{ user.phone }}"
-                readonly
-              />
-            </div>
-            <div class="profile-field">
-              <label for="dateBirth">Дата рождения:</label>
-              <input
-                type="date"
-                id="dateBirth"
-                name="dateBirth"
-                value="{{ user.dateBirth.strftime('%Y-%m-%d') }}"
-                readonly
-              />
-            </div>
-          </div>
-        </div>
+      <section class="requests-section">
+        <div id="requests-container" class="centered-container"></div>
       </section>
     </main>
+    <script src="/static/profileRequests.js"></script>
     <script src="/static/notification.js"></script>
   </body>
 </html>

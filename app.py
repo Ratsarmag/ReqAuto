@@ -86,6 +86,13 @@ def profile():
     return response
 
 
+@app.route('/profile_requests')
+def profile_requests():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('profile_requests.html')
+
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     if 'user_id' not in session:
@@ -548,13 +555,11 @@ def calculate_average_completion_time():
 
 
 def calculate_requests_by_hour():
-    # Извлечение данных о времени создания заявок и группировка по часам
     requests_by_hour = db.session.query(
         func.strftime('%H', RepairRequest.created_at).label('hour'),
         func.count(RepairRequest.ID).label('count')
     ).group_by(func.strftime('%H', RepairRequest.created_at)).all()
 
-    # Преобразование данных в список словарей для удобства использования
     requests_by_hour_list = [
         {"hour": int(hour), "count": count} for hour, count in requests_by_hour]
 

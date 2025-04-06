@@ -105,9 +105,9 @@ nav ul {
 .notifications-container {
   display: none;
   position: absolute;
-  top: 100%; /* Расположение под кнопкой */
+  top: 100%;
   left: 0;
-  width: 200px; /* Фиксированная ширина */
+  width: 200px;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -150,4 +150,73 @@ nav ul {
   border-radius: 50%;
   opacity: 1;
   transition: opacity 0.5s ease;
+}
+
+<style>
+    /* Стили для чата */
+    #supportChatButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#supportChat {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+#supportChat header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+#supportChat .chat-body {
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+#supportChat .chat-body p {
+  margin: 5px 0;
+}
+
+#supportChat .chat-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+#supportChat .chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+}
+
+#supportChat .chat-input button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
