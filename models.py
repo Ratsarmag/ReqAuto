@@ -70,3 +70,12 @@ class Notification(db.Model):
     message = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     read = db.Column(db.Boolean, default=False)
+
+
+class Chat(db.Model):
+    __tablename__ = 'ChatSupport'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    operator_id = db.Column(db.Integer, nullable=True)
+    message = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)

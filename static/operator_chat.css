@@ -1,0 +1,112 @@
+.chat-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  max-width: 200px;
+  text-align: center;
+}
+
+.chat-item:hover {
+  transform: scale(1.05);
+}
+
+.chat-item a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  height: 70vh;
+  margin: 5vh auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+  font-size: 14px;
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  gap: 8px;
+}
+
+.chat-container .operator-message {
+  background-color: #d4edda;
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 15px 15px 15px 0;
+  align-self: flex-start;
+  word-wrap: break-word;
+}
+
+.chat-container .user-message {
+  background-color: #f1f1f1;
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 15px 15px 0 15px;
+  align-self: flex-end;
+  word-wrap: break-word;
+}
+
+.chat-container .user-message p,
+.chat-container .operator-message p {
+  margin-bottom: 5px;
+  height: auto;
+}
+
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+  font-size: 14px;
+}
+
+.chat-input button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  background-color: #4709c3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+  font-size: 14px;
+}
+
+.submit-button {
+  background-color: #4709c3;
+  align-self: flex-start;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #3a08a0;
+}
+
+.no-link-style {
+  text-decoration: none;
+}

@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify, session, make_response
-from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification
+from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification, Chat
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
@@ -600,6 +600,54 @@ def admin_statistics():
                            completed_requests=completed_requests,
                            avg_completion_time=avg_completion_time,
                            requests_by_hour=requests_by_hour)
+
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    data = request.json
+    new_message = Chat(
+        user_id=data['user_id'],
+        operator_id=data.get('operator_id'),
+        message=data['message']
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    return jsonify({"status": "success"}), 200
+
+
+@app.route('/get_messages/<int:user_id>', methods=['GET'])
+def get_messages(user_id):
+    messages = Chat.query.filter_by(user_id=user_id).all()
+    return jsonify([{
+        "id": msg.id,
+        "user_id": msg.user_id,
+        "operator_id": msg.operator_id,
+        "message": msg.message,
+        "timestamp": msg.timestamp.isoformat()
+    } for msg in messages])
+
+
+@app.route('/get_user_id', methods=['GET'])
+def get_user_id():
+    if 'user_id' in session:
+        return jsonify({"user_id": session['user_id']})
+    return jsonify({"user_id": None}), 401
+
+
+@app.route('/get_all_chats', methods=['GET'])
+def get_all_chats():
+    users_with_chats = db.session.query(Chat.user_id).distinct().all()
+    return jsonify([user.user_id for user in users_with_chats])
+
+
+@app.route('/operator_chats')
+def operator_chats():
+    return render_template('operator_chats.html')
+
+
+@app.route('/operator_chat/<int:user_id>')
+def operator_chat(user_id):
+    return render_template('operator_chat.html', user_id=user_id)
 
 
 if __name__ == '__main__':

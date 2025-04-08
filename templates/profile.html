@@ -6,6 +6,7 @@
     <title>Профиль</title>
     <link rel="stylesheet" href="/static/styles.css" />
     <link rel="stylesheet" href="/static/profile.css" />
+    <link rel="stylesheet" href="/static/client_chat.css" />
   </head>
   <body>
     <header>
@@ -140,7 +141,23 @@
           </div>
         </div>
       </section>
+      <section>
+        <button id="supportChatButton">💬</button>
+        <div id="supportChat">
+          <header class="h3">Чат техподдержки</header>
+          <div class="chat-body" id="chatBody"></div>
+          <div class="chat-input">
+            <input
+              type="text"
+              id="chatInput"
+              placeholder="Написать сообщение..."
+            />
+            <button id="sendMessage">Отправить</button>
+          </div>
+        </div>
+      </section>
     </main>
+    <script src="/static/clientsChat.js"></script>
     <script src="/static/notification.js"></script>
   </body>
 </html>

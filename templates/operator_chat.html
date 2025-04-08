@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Чат поддержки</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/operator.css" />
+    <link rel="stylesheet" href="/static/operator_chat.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
+          <li><a href="{{ url_for('clients_requests') }}">Заявки</a></li>
+          <li><a href="#" class="active">Чаты</a></li>
+          <li>
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <button class="button h3 submit-button">
+          <a href="{{ url_for('operator_chats') }}" class="no-link-style">
+            Назад
+          </a>
+        </button>
+        <div
+          class="chat-container"
+          id="chatContainer"
+          data-user-id="{{ user_id }}"
+        ></div>
+        <div class="chat-input">
+          <input
+            type="text"
+            id="operatorInput"
+            placeholder="Написать сообщение..."
+          />
+          <button id="sendOperatorMessage">Отправить</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/operatorChat.js"></script>
+  </body>
+</html>
