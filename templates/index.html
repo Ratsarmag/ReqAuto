@@ -41,11 +41,9 @@
       <nav>
         <ul>
           <li><a href="#" class="active">Главная</a></li>
-          <li><a href="#">Услуги</a></li>
-          <li><a href="#">Товары</a></li>
-          <li><a href="#">Акции</a></li>
+          <li><a href="#promotions-section">Акции</a></li>
           <li><a href="#form">Записаться</a></li>
-          <li><a href="#" onclick="checkSessionAndRedirect()">Профиль</a></li>
+          <li><a onclick="checkSessionAndRedirect()">Профиль</a></li>
         </ul>
       </nav>
       <button class="toggle-menu-button">☰</button>
@@ -91,6 +89,72 @@
           <button class="swiper-button-prev"></button>
           <button class="swiper-button-next"></button>
         </div>
+      </section>
+      <section class="promotions-section" id="promotions-section">
+        <p class="h1 light-text">Акции</p>
+        <div class="promotions-carousel" id="promotionsCarousel">
+          <div class="promotion-card">
+            <img src="/static/assets/promotion.png" alt="promotion" />
+            <div class="promotion-card-text">
+              <p class="h3">Скидка 20% в день рождения</p>
+              <p class="h4">Спешите! Акция действует только в этом месяце.</p>
+              <div class="promotion-price-request">
+                <div class="promotion-price">
+                  <p class="h4 old-price">2000 р.</p>
+                  <p class="h3 title-color">1600 р.</p>
+                </div>
+                <div class="promotion-request">
+                  <p class="h4">Оставить заявку</p>
+                  <img
+                    src="/static/assets/arrow-narrow-right.png"
+                    alt="arrow-narrow-right"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="promotion-card">
+            <img src="/static/assets/promotion.png" alt="promotion" />
+            <div class="promotion-card-text">
+              <p class="h3">Скидка 20% в день рождения</p>
+              <p class="h4">Спешите! Акция действует только в этом месяце.</p>
+              <div class="promotion-price-request">
+                <div class="promotion-price">
+                  <p class="h4 old-price">2000 р.</p>
+                  <p class="h3 title-color">1600 р.</p>
+                </div>
+                <div class="promotion-request">
+                  <p class="h4">Оставить заявку</p>
+                  <img
+                    src="/static/assets/arrow-narrow-right.png"
+                    alt="arrow-narrow-right"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="promotion-card">
+            <img src="/static/assets/promotion.png" alt="promotion" />
+            <div class="promotion-card-text">
+              <p class="h3">Скидка 20% в день рождения</p>
+              <p class="h4">Спешите! Акция действует только в этом месяце.</p>
+              <div class="promotion-price-request">
+                <div class="promotion-price">
+                  <p class="h4 old-price">2000 р.</p>
+                  <p class="h3 title-color">1600 р.</p>
+                </div>
+                <div class="promotion-request">
+                  <p class="h4">Оставить заявку</p>
+                  <img
+                    src="/static/assets/arrow-narrow-right.png"
+                    alt="arrow-narrow-right"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-indicator" id="carouselIndicator"></div>
       </section>
       <section class="horizontal-center-container" id="form">
         <form class="form" action="/submit" method="post">
@@ -163,6 +227,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="static/updateModels.js" defer></script>
     <script src="/static/swiper.js"></script>
-    <script src="static/formErrorListener.js" defer></script>
+    <script src="/static/formErrorListener.js" defer></script>
+    <script src="/static/carousel.js" defer></script>
   </body>
 </html>

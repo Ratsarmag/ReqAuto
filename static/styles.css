@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html,
@@ -7,8 +8,6 @@ body,
 p {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .h1 {
@@ -320,6 +319,95 @@ nav li {
 
 .logout-button:hover svg path {
   fill: #ff9640;
+}
+
+.promotions-section {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.promotions-carousel {
+  display: flex;
+  padding-top: 40px;
+  overflow: hidden;
+  width: 80%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.promotion-card {
+  min-width: 100%;
+  transition: transform 0.5s ease-in-out;
+  background-color: #f4f5f5;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.promotion-card img {
+  border-radius: 5px 5px 0 0;
+}
+
+.promotion-card-text {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.promotion-price-request {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.promotion-request {
+  display: flex;
+  color: #0074d9;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.promotion-price {
+  display: flex;
+  gap: 10px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 10px;
+}
+
+.promotion-card:hover .promotion-request {
+  transition: all 0.3s ease-out;
+  gap: 0;
+}
+
+.carousel-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.carousel-indicator div {
+  width: 10px;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carousel-indicator .active {
+  background-color: #4709c3;
 }
 
 @media (max-width: 1200px) {

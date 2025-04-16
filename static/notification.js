@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       notificationsContainer.style.display === ""
     ) {
       notificationsContainer.style.display = "block";
-      markAllAsRead(); // Пометить все уведомления как прочитанные
+      markAllAsRead();
       loadNotifications();
     } else {
       notificationsContainer.style.display = "none";
