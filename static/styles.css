@@ -4,10 +4,24 @@ html {
 }
 
 html,
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+html,
 body,
 p {
   margin: 0;
   padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }
 
 .h1 {
@@ -324,6 +338,7 @@ nav li {
 .promotions-section {
   padding-top: 100px;
   padding-bottom: 60px;
+  background-color: #f6f7f7;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -342,7 +357,7 @@ nav li {
 .promotion-card {
   min-width: 100%;
   transition: transform 0.5s ease-in-out;
-  background-color: #f4f5f5;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -408,6 +423,171 @@ nav li {
 
 .carousel-indicator .active {
   background-color: #4709c3;
+}
+
+.team-section {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-block {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 40px;
+  gap: 20px;
+  justify-content: center;
+  max-width: 80%;
+  margin-bottom: 60px;
+}
+
+.team-card {
+  background-color: #feffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: calc(33% - 40px);
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-card:hover {
+  transform: scale(1.05);
+}
+
+.team-card-image {
+  position: relative;
+}
+
+.team-card img {
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.social-icons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.social-icons a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.social-icons img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease-out;
+}
+
+.social-icons img:hover {
+  transform: scale(1.2);
+}
+
+.team-card-text {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff;
+  border-radius: 0 0 10px 10px;
+  flex-grow: 1;
+}
+
+.team-role {
+  color: #666;
+}
+
+.team-bio {
+  color: #777;
+}
+
+.team-quote {
+  font-style: italic;
+  color: #555;
+  border-left: 4px solid #4709c3;
+  padding-left: 10px;
+  margin-top: auto;
+}
+
+.faq-section {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  background-color: #f6f7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faq-block {
+  display: flex;
+  padding-top: 40px;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 80%;
+  margin-bottom: 60px;
+}
+
+.faq-item {
+  background-color: #feffff;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: height 0.3s ease-out, border-radius 0.3s ease-out;
+}
+
+.faq-question {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.faq-question::after {
+  content: "+";
+  font-size: 24px;
+  color: #4709c3;
+  transition: transform 0.3s ease-out;
+}
+
+.faq-item.open .faq-question::after {
+  content: "-";
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+  padding: 0 20px;
+  background-color: #f9f9f9;
+}
+
+.faq-item.open .faq-answer {
+  padding: 20px;
+  max-height: 100px;
+  border-top: 1px solid #ddd;
+}
+
+.site-footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
 }
 
 @media (max-width: 1200px) {

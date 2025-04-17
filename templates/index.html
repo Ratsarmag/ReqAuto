@@ -43,6 +43,7 @@
           <li><a href="#" class="active">Главная</a></li>
           <li><a href="#promotions-section">Акции</a></li>
           <li><a href="#form">Записаться</a></li>
+          <li><a href="#faq-section">FAQ</a></li>
           <li><a onclick="checkSessionAndRedirect()">Профиль</a></li>
         </ul>
       </nav>
@@ -90,11 +91,96 @@
           <button class="swiper-button-next"></button>
         </div>
       </section>
+      <section class="team-section" id="team-section">
+        <p class="h1">Наша команда</p>
+        <div class="team-block">
+          <div class="team-card">
+            <div class="team-card-image">
+              <img src="/static/assets/team-1.jpg" alt="Team Member 1" />
+              <div class="social-icons">
+                <a href="#"><img src="/static/assets/vk.png" alt="VK" /></a>
+                <a href="#"
+                  ><img src="/static/assets/telegram.png" alt="Telegram"
+                /></a>
+                <a href="#"
+                  ><img src="/static/assets/twitter.png" alt="Twitter"
+                /></a>
+              </div>
+            </div>
+            <div class="team-card-text">
+              <p class="h3">Иван Иванов</p>
+              <p class="h3 team-role">Главный механик</p>
+              <p class="h4 team-bio">
+                Специалист с 10-летним опытом в ремонте автомобилей. Любит
+                сложные задачи и всегда готов помочь.
+              </p>
+              <blockquote class="team-quote">
+                "Качество ремонта — наша главная цель."
+              </blockquote>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-image">
+              <img src="/static/assets/team-2.jpg" alt="Team Member 2" />
+              <div class="social-icons">
+                <a href="#"><img src="/static/assets/vk.png" alt="VK" /></a>
+                <a href="#"
+                  ><img src="/static/assets/telegram.png" alt="Telegram"
+                /></a>
+                <a href="#"
+                  ><img src="/static/assets/twitter.png" alt="Twitter"
+                /></a>
+              </div>
+            </div>
+            <div class="team-card-text">
+              <p class="h3">Анна Петрова</p>
+              <p class="h3 team-role">Менеджер по работе с клиентами</p>
+              <p class="h4 team-bio">
+                Обеспечивает высокий уровень обслуживания и всегда на связи с
+                клиентами.
+              </p>
+              <blockquote class="team-quote">
+                "Ваше удовлетворение — наша приоритетная задача."
+              </blockquote>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-image">
+              <img src="/static/assets/team-3.jpg" alt="Team Member 3" />
+              <div class="social-icons">
+                <a href="#"><img src="/static/assets/vk.png" alt="VK" /></a>
+                <a href="#"
+                  ><img src="/static/assets/telegram.png" alt="Telegram"
+                /></a>
+                <a href="#"
+                  ><img src="/static/assets/twitter.png" alt="Twitter"
+                /></a>
+              </div>
+            </div>
+            <div class="team-card-text">
+              <p class="h3">Сергей Сидоров</p>
+              <p class="h3 team-role">Старший специалист по диагностике</p>
+              <p class="h4 team-bio">
+                Эксперт в диагностике автомобилей с использованием новейших
+                технологий.
+              </p>
+              <blockquote class="team-quote">
+                "Точность и профессионализм — залог нашего успеха."
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="promotions-section" id="promotions-section">
-        <p class="h1 light-text">Акции</p>
+        <p class="h1">Акции</p>
         <div class="promotions-carousel" id="promotionsCarousel">
           <div class="promotion-card">
-            <img src="/static/assets/promotion.png" alt="promotion" />
+            <img
+              src="/static/assets/promotion.png"
+              alt="promotion"
+              draggable="false"
+            />
             <div class="promotion-card-text">
               <p class="h3">Скидка 20% в день рождения</p>
               <p class="h4">Спешите! Акция действует только в этом месяце.</p>
@@ -114,7 +200,11 @@
             </div>
           </div>
           <div class="promotion-card">
-            <img src="/static/assets/promotion.png" alt="promotion" />
+            <img
+              src="/static/assets/promotion.png"
+              alt="promotion"
+              draggable="false"
+            />
             <div class="promotion-card-text">
               <p class="h3">Скидка 20% в день рождения</p>
               <p class="h4">Спешите! Акция действует только в этом месяце.</p>
@@ -134,7 +224,11 @@
             </div>
           </div>
           <div class="promotion-card">
-            <img src="/static/assets/promotion.png" alt="promotion" />
+            <img
+              src="/static/assets/promotion.png"
+              alt="promotion"
+              draggable="false"
+            />
             <div class="promotion-card-text">
               <p class="h3">Скидка 20% в день рождения</p>
               <p class="h4">Спешите! Акция действует только в этом месяце.</p>
@@ -158,7 +252,7 @@
       </section>
       <section class="horizontal-center-container" id="form">
         <form class="form" action="/submit" method="post">
-          <label class="h2 form-title">Онлайн-запись</label>
+          <label class="h1 form-title">Онлайн-запись</label>
           <input
             class="form-input h3"
             type="text"
@@ -215,6 +309,48 @@
           </button>
         </form>
       </section>
+      <section class="faq-section" id="faq-section">
+        <p class="h1">Часто задаваемые вопросы (FAQ)</p>
+        <div class="faq-block">
+          <div class="faq-item">
+            <p class="faq-question h3">Как записаться на ремонт?</p>
+            <div class="faq-answer h4">
+              <p>
+                Вы можете записаться на ремонт через наш сайт, позвонив по
+                телефону или посетив наш автосервис лично.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <p class="faq-question h3">
+              Какие гарантии предоставляются на ремонт?
+            </p>
+            <div class="faq-answer h4">
+              <p>
+                Мы предоставляем гарантию на все виды ремонта. Подробности можно
+                уточнить у наших специалистов.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <p class="faq-question h3">Какие способы оплаты доступны?</p>
+            <div class="faq-answer h4">
+              <p>
+                Мы принимаем наличные, банковские карты и бесконтактные платежи.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <p class="faq-question h3">Как узнать стоимость ремонта?</p>
+            <div class="faq-answer h4">
+              <p>
+                Стоимость ремонта зависит от сложности работы. Вы можете
+                получить предварительную оценку у наших специалистов.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div id="errorModal" class="modal h2">
         <div class="modal-content">
@@ -223,11 +359,17 @@
         </div>
       </div>
     </main>
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p class="h3">&copy; 2025 Евгений Нечаев. Все права защищены.</p>
+      </div>
+    </footer>
     <script src="static/header.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="static/updateModels.js" defer></script>
     <script src="/static/swiper.js"></script>
     <script src="/static/formErrorListener.js" defer></script>
     <script src="/static/carousel.js" defer></script>
+    <script src="/static/faq.js" defer></script>
   </body>
 </html>

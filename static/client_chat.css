@@ -1,6 +1,6 @@
 #supportChatButton {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;
   right: 20px;
   background-color: #4709c3;
   color: white;
@@ -16,7 +16,7 @@
 #supportChat {
   display: none;
   position: fixed;
-  bottom: 80px;
+  bottom: 140px;
   right: 20px;
   width: 300px;
   background-color: white;
@@ -85,6 +85,6 @@
   padding: 10px;
   background-color: #4709c3;
   color: white;
-  border: none; 
+  border: none;
   cursor: pointer;
 }
