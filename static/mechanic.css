@@ -1,0 +1,54 @@
+nav ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.report-section {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+#request-list {
+  width: 100%;
+}
+
+.report-section form {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-section label {
+  margin-top: 10px;
+}
+
+.report-section input,
+.report-section textarea {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.request-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.request-item:last-child {
+  border-bottom: none;
+}
+
+#reports-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.violet {
+  background-color: #4709c3;
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Редактирование отчета</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/mechanic.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
+          <li><a href="{{ url_for('mechanic_dashboard') }}">Мои заявки</a></li>
+          <li>
+            <a href="{{ url_for('mechanic_reports') }}" class="active"
+              >Отчёты</a
+            >
+          </li>
+          <li>
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      <button class="toggle-menu-button">☰</button>
+    </header>
+    <main>
+      <button class="button h3 submit-button violet">
+        <a href="{{ url_for('mechanic_reports') }}" class="no-link-style">
+          Назад
+        </a>
+      </button>
+      <div class="report-section h3">
+        <form id="report-form">
+          <input type="hidden" id="report-id" value="{{ report.id }}" />
+          <label for="report-description"
+            >Описание проблемы и выполненных работ:</label
+          >
+          <textarea id="report-description" name="report-description" required>
+{{ report.description }}</textarea
+          >
+
+          <label for="report-diagnostics">Диагностика:</label>
+          <textarea id="report-diagnostics" name="report-diagnostics">
+{{ report.diagnostics }}</textarea
+          >
+
+          <label for="report-materials">Использованные материалы:</label>
+          <input
+            type="text"
+            id="report-materials"
+            name="report-materials"
+            value="{{ report.materials }}"
+            required
+          />
+
+          <label for="report-tools">Использованные инструменты:</label>
+          <input
+            type="text"
+            id="report-tools"
+            name="report-tools"
+            value="{{ report.tools_used }}"
+          />
+
+          <label for="report-complexity">Оценка сложности (1-5):</label>
+          <input
+            type="number"
+            id="report-complexity"
+            name="report-complexity"
+            min="1"
+            max="5"
+            value="{{ report.complexity }}"
+            required
+          />
+
+          <label for="report-total-cost">Общая стоимость ремонта:</label>
+          <input
+            type="number"
+            id="report-total-cost"
+            name="report-total-cost"
+            step="0.01"
+            value="{{ report.total_cost }}"
+            required
+          />
+
+          <label for="report-recommendations">Рекомендации:</label>
+          <textarea id="report-recommendations" name="report-recommendations">
+{{ report.recommendations }}</textarea
+          >
+
+          <label for="report-before-photos">Фотографии до ремонта (URL):</label>
+          <input
+            type="text"
+            id="report-before-photos"
+            name="report-before-photos"
+            value="{{ report.before_photos }}"
+          />
+
+          <label for="report-after-photos"
+            >Фотографии после ремонта (URL):</label
+          >
+          <input
+            type="text"
+            id="report-after-photos"
+            name="report-after-photos"
+            value="{{ report.after_photos }}"
+          />
+
+          <label for="report-mechanic-comments">Комментарии механика:</label>
+          <textarea
+            id="report-mechanic-comments"
+            name="report-mechanic-comments"
+          >
+{{ report.mechanic_comments }}</textarea
+          >
+
+          <button type="submit" class="h3 button submit-button">
+            Сохранить отчет
+          </button>
+        </form>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <p class="h3">&copy; 2025 Евгений Нечаев. Все права защищены.</p>
+    </footer>
+    <script src="/static/edit_report.js"></script>
+    <script src="/static/header.js" defer></script>
+  </body>
+</html>

@@ -79,3 +79,22 @@ class Chat(db.Model):
     operator_id = db.Column(db.Integer, nullable=True)
     message = db.Column(db.String(500), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey(
+        'RepairRequest.ID'), nullable=True)
+    mechanicID = db.Column(db.Integer, db.ForeignKey('User.ID'), nullable=True)
+    description = db.Column(db.Text, nullable=False)
+    diagnostics = db.Column(db.Text, nullable=True)
+    materials = db.Column(db.Text, nullable=False)
+    tools_used = db.Column(db.Text, nullable=True)
+    complexity = db.Column(db.Integer, nullable=False)
+    total_cost = db.Column(db.Float, nullable=False)
+    recommendations = db.Column(db.Text, nullable=True)
+    before_photos = db.Column(db.Text, nullable=True)
+    after_photos = db.Column(db.Text, nullable=True)
+    mechanic_comments = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

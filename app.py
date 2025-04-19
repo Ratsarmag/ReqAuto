@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify, session, make_response
-from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification, Chat
+from models import db, User, Car, RepairRequest, Status, CarMake, CarModel, Role, Notification, Chat, Report
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
@@ -405,10 +405,20 @@ def get_roles():
 def get_mechanics():
     all_mechanics = User.query.filter_by(roleID=3).all()
     active_requests = RepairRequest.query.filter_by(statusID=2).all()
-    busy_mechanic_ids = [
-        request.mechanicID for request in active_requests if request.mechanicID is not None]
+
+    mechanic_request_counts = {}
+    for request in active_requests:
+        if request.mechanicID is not None:
+            if request.mechanicID in mechanic_request_counts:
+                mechanic_request_counts[request.mechanicID] += 1
+            else:
+                mechanic_request_counts[request.mechanicID] = 1
+
     available_mechanics = [
-        mechanic for mechanic in all_mechanics if mechanic.ID not in busy_mechanic_ids]
+        mechanic for mechanic in all_mechanics
+        if mechanic.ID not in mechanic_request_counts or mechanic_request_counts[mechanic.ID] < 3
+    ]
+
     mechanics_data = [{'ID': mechanic.ID, 'firstName': mechanic.firstName,
                        'lastName': mechanic.lastName} for mechanic in available_mechanics]
     return jsonify(mechanics_data)
@@ -564,6 +574,176 @@ def calculate_requests_by_hour():
         {"hour": int(hour), "count": count} for hour, count in requests_by_hour]
 
     return requests_by_hour_list
+
+
+@app.route('/mechanic_dashboard')
+def mechanic_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 3:
+        return redirect(url_for('auth'))
+
+    mechanic_requests = RepairRequest.query.filter_by(
+        mechanicID=user_id, statusID=2).all()
+
+    return render_template('mechanic_dashboard.html', requests=mechanic_requests)
+
+
+@app.route('/mechanic_reports')
+def mechanic_reports():
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 3:
+        return redirect(url_for('auth'))
+
+    reports = Report.query.filter_by(mechanicID=user_id, status='draft').all()
+
+    return render_template('mechanic_reports.html', reports=reports)
+
+
+@app.route('/create_draft/<int:request_id>', methods=['POST'])
+def create_draft(request_id):
+    user_id = session['user_id']
+
+    new_report = Report(
+        request_id=request_id,
+        mechanicID=user_id,
+        description="",
+        diagnostics="",
+        materials="",
+        tools_used="",
+        complexity=0,
+        total_cost=0.0,
+        recommendations="",
+        before_photos="",
+        after_photos="",
+        mechanic_comments="",
+        status='draft'
+    )
+
+    db.session.add(new_report)
+    db.session.commit()
+
+    return jsonify({"status": "success", "report_id": new_report.id})
+
+
+@app.route('/edit_report/<int:report_id>')
+def edit_report(report_id):
+    if 'user_id' not in session:
+        return redirect(url_for('auth'))
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    if user.roleID != 3:
+        return redirect(url_for('auth'))
+
+    report = Report.query.filter_by(
+        id=report_id, mechanicID=user_id, status='draft').first()
+
+    if not report:
+        return redirect(url_for('mechanic_reports'))
+
+    return render_template('edit_report.html', report=report)
+
+
+@app.route('/update_report', methods=['POST'])
+def update_report():
+    data = request.json
+    report = Report.query.get(data['id'])
+
+    if report:
+        report.description = data['description']
+        report.diagnostics = data['diagnostics']
+        report.materials = data['materials']
+        report.tools_used = data['tools_used']
+        report.complexity = data['complexity']
+        report.total_cost = data['total_cost']
+        report.recommendations = data['recommendations']
+        report.before_photos = data['before_photos']
+        report.after_photos = data['after_photos']
+        report.mechanic_comments = data['mechanic_comments']
+        report.status = data.get('status', 'draft')
+
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Отчет успешно обновлен"})
+
+    return jsonify({"status": "error", "message": "Отчет не найден"}), 404
+
+
+@app.route('/complete_request/<int:request_id>', methods=['POST'])
+def complete_request(request_id):
+    repair_request = RepairRequest.query.get(request_id)
+    if repair_request:
+        repair_request.statusID = 3
+        repair_request.completed_at = datetime.utcnow()
+        db.session.commit()
+        return jsonify({"status": "success"})
+    return jsonify({"status": "error", "message": "Заявка не найдена"}), 404
+
+
+@app.route('/api/mechanic_requests', methods=['GET'])
+def get_mechanic_requests():
+    if 'user_id' not in session:
+        return jsonify([]), 403
+
+    user_id = session['user_id']
+    mechanic_requests = RepairRequest.query.filter_by(
+        mechanicID=user_id, statusID=2).all()
+
+    requests_data = []
+    for index, request in enumerate(mechanic_requests, start=1):
+        user = User.query.get(request.userID)
+        car = Car.query.get(request.carID)
+        car_make = CarMake.query.get(car.carMakeID)
+        car_model = CarModel.query.get(car.carModelID)
+        status = Status.query.get(request.statusID)
+        requests_data.append({
+            'number': index,
+            'id': request.ID,
+            'firstName': user.firstName,
+            'lastName': user.lastName,
+            'phone': user.phone,
+            'carMake': car_make.carMake,
+            'carModel': car_model.carModel,
+            'defectsDescription': request.defectsDescription,
+            'status': status.status,
+            'created_at': request.created_at,
+            'accepted_at': request.accepted_at,
+        })
+
+    return jsonify(requests_data)
+
+
+@app.route('/submit_report', methods=['POST'])
+def submit_report():
+    data = request.json
+    new_report = Report(
+        request_id=data['request_id'],
+        description=data['description'],
+        diagnostics=data.get('diagnostics', ''),
+        materials=data['materials'],
+        tools_used=data.get('tools_used', ''),
+        complexity=data['complexity'],
+        total_cost=data['total_cost'],
+        recommendations=data.get('recommendations', ''),
+        before_photos=data.get('before_photos', ''),
+        after_photos=data.get('after_photos', ''),
+        mechanic_comments=data.get('mechanic_comments', '')
+    )
+
+    db.session.add(new_report)
+    db.session.commit()
+
+    return jsonify({"status": "success", "message": "Отчет успешно отправлен"})
 
 
 @app.route('/admin_statistics')

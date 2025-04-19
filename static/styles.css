@@ -526,6 +526,7 @@ nav li {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .faq-block {
@@ -608,6 +609,7 @@ nav li {
     display: none;
     flex-direction: column;
     margin-top: 20px;
+    align-items: flex-start;
   }
 
   nav li {

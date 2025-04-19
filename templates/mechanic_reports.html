@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Редактируемые отчеты</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/mechanic.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">ReqAuto</div>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Главная</a></li>
+          <li><a href="{{ url_for('mechanic_dashboard') }}">Мои заявки</a></li>
+          <li>
+            <a href="{{ url_for('mechanic_reports') }}" class="active"
+              >Отчёты</a
+            >
+          </li>
+          <li>
+            <form
+              action="{{ url_for('logout') }}"
+              method="post"
+              class="logout-form"
+            >
+              <button type="submit" class="logout-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="#ffffff"
+                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      <button class="toggle-menu-button">☰</button>
+    </header>
+    <main>
+      <div class="reports-container">
+        <div id="reports-list">
+          {% for report in reports %}
+          <div class="card">
+            <p class="h2">Отчет #{{ report.id }}</p>
+            <button class="button submit-button h3">
+              <a
+                class="no-link-style"
+                href="{{ url_for('edit_report', report_id=report.id) }}"
+              >
+                Редактировать
+              </a>
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <p class="h3">&copy; 2025 Евгений Нечаев. Все права защищены.</p>
+    </footer>
+    <script src="/static/header.js" defer></script>
+  </body>
+</html>
