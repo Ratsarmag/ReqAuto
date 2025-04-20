@@ -36,6 +36,13 @@
           <li><a href="{{ url_for('index') }}">Главная</a></li>
           <li><a href="#" class="active">Заявки</a></li>
           <li><a href="{{ url_for('operator_chats') }}">Чаты</a></li>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input h3"
+            placeholder="Поиск по заявкам..."
+            onkeyup="filterRequests()"
+          />
           <li>
             <form
               action="{{ url_for('logout') }}"
@@ -59,15 +66,6 @@
           </li>
         </ul>
       </nav>
-
-      <!-- Адаптировать -->
-      <input
-        type="text"
-        id="searchInput"
-        class="search-input h3"
-        placeholder="Поиск по заявкам..."
-        onkeyup="filterRequests()"
-      />
       <button class="toggle-menu-button">☰</button>
     </header>
     <main>

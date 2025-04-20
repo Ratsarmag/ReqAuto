@@ -45,6 +45,13 @@ main {
   font-size: 18px;
 }
 
+.h4 {
+  text-transform: initial;
+  font-family: "Rubik", sans-serif;
+  font-weight: 100;
+  font-size: 16px;
+}
+
 .wh {
   color: #fafbfb;
 }
@@ -439,6 +446,7 @@ nav li {
   padding-top: 40px;
   gap: 20px;
   justify-content: center;
+  flex-wrap: wrap;
   max-width: 80%;
   margin-bottom: 60px;
 }
@@ -595,11 +603,19 @@ nav li {
   nav li {
     font-size: 14px;
   }
+
+  .team-card {
+    width: calc(50% - 40px);
+  }
 }
 
 @media (max-width: 992px) {
   nav li {
     font-size: 12px;
+  }
+
+  .team-card {
+    width: calc(100% - 40px);
   }
 }
 
@@ -640,6 +656,10 @@ nav li {
   .h3 {
     font-size: 16px;
   }
+
+  .h4 {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -653,5 +673,8 @@ nav li {
 
   .h3 {
     font-size: 12px;
+  }
+  .h4 {
+    font-size: 10px;
   }
 }
